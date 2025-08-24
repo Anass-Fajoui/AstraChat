@@ -1,21 +1,27 @@
-import { useRef, type FormEvent } from "react";
+import { useContext, useRef, type FormEvent } from "react";
 import type { Message } from "../types/types";
 import MessageItem from "./MessageItem";
 import type { Client } from "@stomp/stompjs";
+import { StompClientContext } from "../Context/StompClientContext";
 
 interface ChatAreaProps {
     messages: Message[];
-    clientRef: React.RefObject<Client | null>;
 }
 
-const ChatArea = ({ messages, clientRef }: ChatAreaProps) => {
+const ChatArea = ({ messages }: ChatAreaProps) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const username = localStorage.getItem("username");
+
+    const stompContext = useContext(StompClientContext);
+    if (!stompContext) {
+        throw new Error("ChatPage must be used inside provider");
+    }
+    const { stompClient, setStompClient } = stompContext;
 
     function sendMessage(event: FormEvent) {
         event.preventDefault();
         if (inputRef.current && inputRef.current.value) {
-            clientRef.current?.publish({
+            stompClient?.publish({
                 destination: "/app/chat.sendMessage",
                 body: JSON.stringify({
                     sender: username,

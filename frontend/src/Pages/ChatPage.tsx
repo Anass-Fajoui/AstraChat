@@ -1,16 +1,21 @@
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { type Message } from "../types/types";
 import Header from "../Components/Header";
 import ChatArea from "../Components/ChatArea";
+import { StompClientContext } from "../Context/StompClientContext";
 
 const ChatPage = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [connected, setConnected] = useState<boolean>(false);
-    const clientRef = useRef<Client | null>(null);
-    
+    const stompContext = useContext(StompClientContext)
+    if (!stompContext){
+        throw new Error("ChatPage must be used inside provider")
+    }
+    const {stompClient, setStompClient} = stompContext;
+
     const username = localStorage.getItem("username");
     const navigate = useNavigate();
 
@@ -39,7 +44,7 @@ const ChatPage = () => {
         });
 
         client.activate();
-        clientRef.current = client;
+        setStompClient(client);
         return () => {
             if (client.connected) {
                 client.deactivate();
@@ -48,7 +53,7 @@ const ChatPage = () => {
     }, []);
 
     function disconnect() {
-        clientRef.current?.deactivate();
+        stompClient?.deactivate();
         setConnected(false);
         localStorage.setItem("username", "");
         navigate("/login");
@@ -57,7 +62,7 @@ const ChatPage = () => {
     return (
         <div className="min-h-screen flex flex-col">
             <Header connected={connected} disconnect={disconnect}/>
-            <ChatArea messages={messages} clientRef={clientRef}/>
+            <ChatArea messages={messages}/>
         </div>
     );
 };
