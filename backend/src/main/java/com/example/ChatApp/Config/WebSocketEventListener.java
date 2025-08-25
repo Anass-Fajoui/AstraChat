@@ -27,7 +27,7 @@ public class WebSocketEventListener {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
 
         Principal user = accessor.getUser();
-
+        log.info("New User connected");
         if (user != null) {
             log.info("User connected: " + user.getName());
         }
@@ -38,7 +38,7 @@ public class WebSocketEventListener {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
 
         Principal user = accessor.getUser();
-
+        log.info("New User disconnected");
         if (user != null) {
             log.info("User disconnected: " + user.getName());
         }

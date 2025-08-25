@@ -6,6 +6,7 @@ import com.example.ChatApp.Models.User;
 import com.example.ChatApp.Repositories.UserRepository;
 import com.example.ChatApp.Services.ChatMessageService;
 import com.example.ChatApp.Services.ChatRoomService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -36,4 +37,17 @@ public class ChatController {
     ){
         return chatMessage;
     }
+
+    @MessageMapping("/chatpublic")
+    @SendTo("/topic/messages")
+    public NewChatMessage sendMessage(NewChatMessage message) {
+        return message;
+    }
+}
+
+@Data
+class NewChatMessage {
+    private String message;
+    private String sender;
+
 }
