@@ -1,19 +1,25 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { fetchUsers } from "../api/users";
 import { useNavigate } from "react-router";
 import { getStoredUser } from "../utils/Storage";
+import { type Message, type User } from "../types/types";
+import { NewMessageContext } from "../Context/NewMessageContext";
 
-type User = {
-    id: string;
-    name: string;
-    username: string;
-    email: string;
+type UserListProps = {
+    selectedConv: string;
+    setSelectedConv: (s: string) => void;
 };
 
-const UserList = () => {
+const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
     const [users, setUsers] = useState<User[]>([]);
     const currentUser = getStoredUser();
     const navigate = useNavigate();
+
+    const newMessageContext = useContext(NewMessageContext);
+    if (!newMessageContext) {
+        throw new Error("Home Page must be used inside new message provider");
+    }
+    const { newMessage, setNewMessage } = newMessageContext;
 
     useEffect(() => {
         const doTheJob = async () => {
@@ -21,10 +27,10 @@ const UserList = () => {
                 const data = await fetchUsers();
                 setUsers(data);
             } catch (error: any) {
-                console.log(error)
+                console.log(error);
                 if (error.response) {
-                    if (error.response.code === "403"){
-                        navigate("/login")
+                    if (error.response.code === "403") {
+                        navigate("/login");
                     }
                     alert(
                         `Error fetching the users : ${error.response.data.message}`
@@ -39,17 +45,33 @@ const UserList = () => {
     }, []);
 
     return (
-        <div className="w-[300px]">
+        <div className="w-[300px] h-130 bg-blue-50 p-1">
             <ul>
-                {users.map((user) => ( user.id === currentUser.id ? "" :
-                    <li
-                        key={user.id}
-                        className="p-3 bg-blue-300 hover:bg-blue-500 hover:cursor-pointer"
-                        onClick={() => navigate(`/chat/${user.id}`)}
-                    >
-                        {user.name}
-                    </li>
-                ))}
+                {users.map((user) =>
+                    user.id === currentUser.id ? (
+                        ""
+                    ) : (
+                        <li
+                            key={user.id}
+                            className={
+                                user.id === selectedConv
+                                    ? "m-2 p-3 bg-blue-400 hover:bg-blue-500 hover:cursor-pointer transition rounded-2xl flex justify-between items-center"
+                                    : "m-2 p-3 bg-blue-200 hover:bg-blue-300 hover:cursor-pointer transition rounded-2xl flex justify-between items-center"
+                            }
+                            onClick={() => {
+                                navigate(`${user.id}`);
+                                setSelectedConv(user.id);
+                            }}
+                        >
+                            <div>{user.name}</div>
+                            {newMessage && newMessage.senderId === user.id && (
+                                <div className="text-xs text-red-800">
+                                    (New Messages)
+                                </div>
+                            )}
+                        </li>
+                    )
+                )}
             </ul>
         </div>
     );
