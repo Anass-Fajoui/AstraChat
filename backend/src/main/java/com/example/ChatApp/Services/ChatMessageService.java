@@ -23,6 +23,7 @@ public class ChatMessageService {
                 .chatId(chatRoomId)
                 .senderId(request.getSenderId())
                 .receiverId(request.getReceiverId())
+                .content(request.getContent())
                 .build();
         return chatMessageRepository.save(chatMessage);
     }

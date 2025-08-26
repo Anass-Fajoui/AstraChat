@@ -43,5 +43,4 @@ public class WebSocketEventListener {
             log.info("User disconnected: " + user.getName());
         }
     }
-
 }

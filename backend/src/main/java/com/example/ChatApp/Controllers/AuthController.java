@@ -1,5 +1,6 @@
 package com.example.ChatApp.Controllers;
 
+import com.example.ChatApp.Models.DTOs.AuthResponse;
 import com.example.ChatApp.Models.DTOs.LoginRequest;
 import com.example.ChatApp.Models.DTOs.RegisterRequest;
 import com.example.ChatApp.Models.User;
@@ -28,7 +29,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
@@ -44,23 +45,42 @@ public class AuthController {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(hashedPassword);
-        userRepository.save(user);
+        user = userRepository.save(user);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String jwt = jwtService.generateToken(userDetails);
 
-        return ResponseEntity.ok(jwt);
+        AuthResponse authResponse = AuthResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .token(jwt)
+                .build();
+
+        return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail()
                         , request.getPassword())
         );
 
-        final UserDetails user = userDetailsService.loadUserByUsername(request.getEmail());
-        final String jwt = jwtService.generateToken(user);
-        return ResponseEntity.ok(jwt);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        final String jwt = jwtService.generateToken(userDetails);
+
+        User user = userRepository.findByEmail(request.getEmail()).get();
+
+        AuthResponse authResponse = AuthResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .token(jwt)
+                .build();
+
+        return ResponseEntity.ok(authResponse);
     }
 }
