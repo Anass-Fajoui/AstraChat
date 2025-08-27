@@ -6,17 +6,16 @@ import { useNavigate, useParams } from "react-router";
 import { fetchConversationMessages, fetchUser } from "../api/api";
 import { getStoredUser } from "../utils/Storage";
 import { NewMessageContext } from "../Context/NewMessageContext";
+import { useMessages } from "../Hooks/useMessages";
+import { useUsers } from "../Hooks/useUsers";
+import { useUser } from "../Hooks/useUser";
 
 const ConversationArea = () => {
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [messages, setMessages] = useState<Message[]>([]);
     const currentUser = getStoredUser();
     const { receiverId } = useParams();
-    const [receiverUser, setReceiverUser] = useState<User | undefined>(
-        undefined
-    );
 
     const stompContext = useContext(StompClientContext);
     if (!stompContext) {
@@ -29,56 +28,9 @@ const ConversationArea = () => {
         throw new Error("Home Page must be used inside new message provider");
     }
     const { newMessage, setNewMessage } = newMessageContext;
-
-    useEffect(() => {
-        if (containerRef.current) {
-            console.log("scroll down");
-            containerRef.current.scrollTop = containerRef.current.scrollHeight;
-        }
-        const fetchMessages = async () => {
-            if (!receiverId) {
-                throw new Error("there is no id in url");
-            }
-            try {
-                const data = await fetchConversationMessages(receiverId);
-                console.log("data fetched sucessfully");
-                setMessages(data);
-            } catch (error: any) {
-                if (error.response) {
-                    if (error.status === 403) {
-                        navigate("/login");
-                    } else {
-                        alert(
-                            `Error fetching the messages : ${error.response.data.message}`
-                        );
-                    }
-                } else {
-                    alert(`Error fetching the messages`);
-                }
-            }
-            try {
-                const data = await fetchUser(receiverId);
-                setReceiverUser(data);
-            } catch (error: any) {
-                if (error.response) {
-                    if (error.status === 403) {
-                        navigate("/login");
-                    } else {
-                        alert(
-                            `Error fetching the receiver user : ${error.response.data.message}`
-                        );
-                    }
-                } else {
-                    alert(`Error fetching the receiver user`);
-                }
-            }
-        };
-
-        fetchMessages();
-        if (newMessage && newMessage.senderId === receiverId) {
-            setNewMessage(undefined);
-        }
-    }, [receiverId, newMessage]);
+    
+    const {messages, setMessages, messagesLoading, messagesError} = useMessages(receiverId, newMessage);
+    const {user: receiverUser, userLoading, userError} = useUser(receiverId);
 
     function sendMessage(event: FormEvent) {
         event.preventDefault();

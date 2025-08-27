@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import { fetchUsers } from "../api/api";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { getStoredUser } from "../utils/Storage";
-import { type Message, type User } from "../types/types";
 import { NewMessageContext } from "../Context/NewMessageContext";
+import { useUsers } from "../Hooks/useUsers";
 
 type UserListProps = {
     selectedConv: string;
@@ -11,7 +10,6 @@ type UserListProps = {
 };
 
 const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
-    const [users, setUsers] = useState<User[]>([]);
     const currentUser = getStoredUser();
     const navigate = useNavigate();
 
@@ -21,30 +19,13 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
     }
     const { newMessage, setNewMessage } = newMessageContext;
 
-    useEffect(() => {
-        const doTheJob = async () => {
-            try {
-                const data = await fetchUsers();
-                setUsers(data);
-            } catch (error: any) {
-                if (error.response) {
-                    if (error.status === 403) {
-                        navigate("/login");
-                    } else {
-                        alert(`Error fetching the users : ${error.message}`);
-                    }
-                } else {
-                    alert(`Error fetching the users`);
-                }
-            }
-        };
-
-        doTheJob();
-    }, []);
+    const {users, loading, error} = useUsers();
 
     return (
         <div className="w-[300px] h-130 bg-blue-50 p-1">
             <ul>
+                {loading && <p className="text-center">Loading...</p>}
+                {error && <p className="text- text-red-500">{error}</p>}
                 {users.map((user) =>
                     user.id === currentUser.id ? (
                         ""

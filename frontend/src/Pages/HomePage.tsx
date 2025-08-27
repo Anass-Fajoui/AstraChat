@@ -1,35 +1,25 @@
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, useParams } from "react-router";
 import Header from "../Components/Header";
-import { StompClientContext } from "../Context/StompClientContext";
+import { useStompClientContext } from "../Context/StompClientContext";
 import UserList from "../Components/UserList";
-import { NewMessageContext } from "../Context/NewMessageContext";
+import { useNewMessageContext } from "../Context/NewMessageContext";
 
 const HomePage = () => {
     const [selectedConv, setSelectedConv] = useState<string>("");
-
-    const stompContext = useContext(StompClientContext);
-    if (!stompContext) {
-        throw new Error("Home Page must be used inside stomp context provider");
-    }
-    const { setStompClient } = stompContext;
-
-    const newMessageContext = useContext(NewMessageContext);
-    if (!newMessageContext) {
-        throw new Error("Home Page must be used inside new message provider");
-    }
-    const { newMessage, setNewMessage } = newMessageContext;
+    const { setStompClient } = useStompClientContext();
+    const { newMessage, setNewMessage } = useNewMessageContext();
     const {receiverId} = useParams();
-    
+
     useEffect(() => {
         if (receiverId) {
             setSelectedConv(receiverId);
         } else {
             setSelectedConv("");
         }
-        const socket = new SockJS("http://localhost:8080/ws");
+        const socket = new SockJS(`${import.meta.env.VITE_BACKEND_URL}/ws`);
         const client = new Client({
             webSocketFactory: () => socket,
             connectHeaders: {

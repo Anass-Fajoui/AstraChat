@@ -23,7 +23,7 @@ export async function fetchUsers() : Promise<User[]>{
     return response.data;
 }
 
-export async function fetchUser(id : String): Promise<User>{
+export async function fetchUser(id : string | undefined): Promise<User>{
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/${id}`, {
     headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -33,7 +33,7 @@ export async function fetchUser(id : String): Promise<User>{
     return response.data;
 }
 
-export async function fetchConversationMessages(receiverId: string){
+export async function fetchConversationMessages(receiverId: string | undefined){
     const storedUser = getStoredUser();
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/message/${storedUser.id}/${receiverId}`, {
     headers: {
