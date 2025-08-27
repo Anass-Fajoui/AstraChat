@@ -3,13 +3,14 @@ import type { Message, User } from "../types/types";
 import MessageItem from "./MessageItem";
 import { StompClientContext } from "../Context/StompClientContext";
 import { useNavigate, useParams } from "react-router";
-import { fetchConversationMessages, fetchUser } from "../api/users";
+import { fetchConversationMessages, fetchUser } from "../api/api";
 import { getStoredUser } from "../utils/Storage";
 import { NewMessageContext } from "../Context/NewMessageContext";
 
 const ConversationArea = () => {
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const currentUser = getStoredUser();
     const { receiverId } = useParams();
@@ -23,28 +24,34 @@ const ConversationArea = () => {
     }
     const { stompClient } = stompContext;
 
-     const newMessageContext = useContext(NewMessageContext);
+    const newMessageContext = useContext(NewMessageContext);
     if (!newMessageContext) {
         throw new Error("Home Page must be used inside new message provider");
     }
     const { newMessage, setNewMessage } = newMessageContext;
 
     useEffect(() => {
+        if (containerRef.current) {
+            console.log("scroll down");
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        }
         const fetchMessages = async () => {
             if (!receiverId) {
                 throw new Error("there is no id in url");
             }
             try {
                 const data = await fetchConversationMessages(receiverId);
+                console.log("data fetched sucessfully");
                 setMessages(data);
             } catch (error: any) {
                 if (error.response) {
-                    if (error.response.code === "403") {
+                    if (error.status === 403) {
                         navigate("/login");
+                    } else {
+                        alert(
+                            `Error fetching the messages : ${error.response.data.message}`
+                        );
                     }
-                    alert(
-                        `Error fetching the messages : ${error.response.data.message}`
-                    );
                 } else {
                     alert(`Error fetching the messages`);
                 }
@@ -54,12 +61,13 @@ const ConversationArea = () => {
                 setReceiverUser(data);
             } catch (error: any) {
                 if (error.response) {
-                    if (error.response.code === "403") {
+                    if (error.status === 403) {
                         navigate("/login");
+                    } else {
+                        alert(
+                            `Error fetching the receiver user : ${error.response.data.message}`
+                        );
                     }
-                    alert(
-                        `Error fetching the receiver user : ${error.response.data.message}`
-                    );
                 } else {
                     alert(`Error fetching the receiver user`);
                 }
@@ -67,7 +75,7 @@ const ConversationArea = () => {
         };
 
         fetchMessages();
-        if (newMessage && newMessage.senderId === receiverId){
+        if (newMessage && newMessage.senderId === receiverId) {
             setNewMessage(undefined);
         }
     }, [receiverId, newMessage]);
@@ -102,7 +110,10 @@ const ConversationArea = () => {
                 {receiverUser ? receiverUser.name : "Name"}
             </div>
             <div className="">
-                <div className="bg-gray-200 h-101 overflow-y-auto py-3 px-5">
+                <div
+                    className="bg-gray-200 h-101 overflow-y-auto py-3 px-5"
+                    ref={containerRef}
+                >
                     {messages.map((msg) => (
                         <MessageItem
                             key={msg.id}

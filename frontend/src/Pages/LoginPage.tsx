@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { Login } from "../api/users";
+import { Login } from "../api/api";
 
 type LoginFormValue = {
     email: string;

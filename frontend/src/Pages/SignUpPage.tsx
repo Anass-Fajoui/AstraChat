@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { Register } from "../api/users";
+import { Register } from "../api/api";
 
 type RegisterFormValue = {
     name: string;

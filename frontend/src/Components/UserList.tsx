@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { fetchUsers } from "../api/users";
+import { fetchUsers } from "../api/api";
 import { useNavigate } from "react-router";
 import { getStoredUser } from "../utils/Storage";
 import { type Message, type User } from "../types/types";
@@ -27,14 +27,12 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                 const data = await fetchUsers();
                 setUsers(data);
             } catch (error: any) {
-                console.log(error);
                 if (error.response) {
-                    if (error.response.code === "403") {
+                    if (error.status === 403) {
                         navigate("/login");
+                    } else {
+                        alert(`Error fetching the users : ${error.message}`);
                     }
-                    alert(
-                        `Error fetching the users : ${error.response.data.message}`
-                    );
                 } else {
                     alert(`Error fetching the users`);
                 }

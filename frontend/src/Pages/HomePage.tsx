@@ -1,7 +1,7 @@
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useState, useContext, useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useParams } from "react-router";
 import Header from "../Components/Header";
 import { StompClientContext } from "../Context/StompClientContext";
 import UserList from "../Components/UserList";
@@ -21,8 +21,14 @@ const HomePage = () => {
         throw new Error("Home Page must be used inside new message provider");
     }
     const { newMessage, setNewMessage } = newMessageContext;
-
+    const {receiverId} = useParams();
+    
     useEffect(() => {
+        if (receiverId) {
+            setSelectedConv(receiverId);
+        } else {
+            setSelectedConv("");
+        }
         const socket = new SockJS("http://localhost:8080/ws");
         const client = new Client({
             webSocketFactory: () => socket,
