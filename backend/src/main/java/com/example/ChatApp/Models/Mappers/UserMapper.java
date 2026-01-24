@@ -4,8 +4,6 @@ import com.example.ChatApp.Models.DTOs.UserDTO;
 import com.example.ChatApp.Models.User;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class UserMapper {

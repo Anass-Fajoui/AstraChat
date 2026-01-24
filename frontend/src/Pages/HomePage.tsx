@@ -1,16 +1,12 @@
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
 import { useState, useEffect } from "react";
 import { Outlet, useParams } from "react-router";
 import Header from "../Components/Header";
-import { useStompClientContext } from "../Context/StompClientContext";
 import UserList from "../Components/UserList";
-import { useNewMessageContext } from "../Context/NewMessageContext";
+import { useStompClient } from "../Hooks/useStompClient";
 
 const HomePage = () => {
     const [selectedConv, setSelectedConv] = useState<string>("");
-    const { setStompClient } = useStompClientContext();
-    const { newMessage, setNewMessage } = useNewMessageContext();
+    const {stompClient} = useStompClient();
     const {receiverId} = useParams();
 
     useEffect(() => {
@@ -19,46 +15,27 @@ const HomePage = () => {
         } else {
             setSelectedConv("");
         }
-        const socket = new SockJS(`${import.meta.env.VITE_BACKEND_URL}/ws`);
-        const client = new Client({
-            webSocketFactory: () => socket,
-            connectHeaders: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            onConnect: () => {
-                console.log("connected successfully");
-                client.subscribe(`/user/queue/messages`, (msg) => {
-                    console.log("message received : " + msg.body);
-                    const m = JSON.parse(msg.body);
-                    setNewMessage({
-                        id: "",
-                        chatId: "",
-                        senderId: m.senderId,
-                        receiverId: m.receiverId,
-                        content: m.content,
-                    });
-                });
-            },
-            onDisconnect: () => {},
-        });
-        client.activate();
-        setStompClient(client);
+
         return () => {
-            if (client.connected) {
-                client.deactivate();
+            if (stompClient?.connected) {
+                stompClient.deactivate();
             }
         };
-    }, []);
+    }, [receiverId, stompClient]);
 
     return (
-        <div className="h-screen flex flex-col">
-            <Header setSelectedConv={setSelectedConv} />
-            <div className="flex items-start">
-                <UserList
-                    selectedConv={selectedConv}
-                    setSelectedConv={setSelectedConv}
-                />
-                <Outlet />
+        <div className="min-h-screen px-4 py-6 md:px-8 lg:px-12">
+            <div className="mx-auto max-w-7xl space-y-6">
+                <Header setSelectedConv={setSelectedConv} />
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-[320px,1fr]">
+                    <UserList
+                        selectedConv={selectedConv}
+                        setSelectedConv={setSelectedConv}
+                    />
+                    <div className="glass-panel min-h-[640px] rounded-3xl overflow-hidden">
+                        <Outlet />
+                    </div>
+                </div>
             </div>
         </div>
     );
