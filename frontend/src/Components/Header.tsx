@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { StompClientContext } from "../Context/StompClientContext";
 import { getStoredUser } from "../utils/Storage";
 
@@ -37,7 +37,9 @@ const Header = ({ setSelectedConv }: HeaderProps) => {
                     {storedUser.name.slice(0, 1).toUpperCase()}
                 </div>
                 <div className="space-y-1">
-                    <p className="text-lg font-semibold text-white">{storedUser.name}</p>
+                    <p className="text-lg font-semibold text-white">
+                        {storedUser.name}
+                    </p>
                     <p className="flex items-center gap-2 text-sm text-slate-300">
                         <span className="h-2 w-2 rounded-full bg-emerald-400" />
                         Connected as {storedUser.username}

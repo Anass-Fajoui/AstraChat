@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { getStoredUser } from "../utils/Storage";
 import { NewMessageContext } from "../Context/NewMessageContext";
 import { useUsers } from "../Hooks/useUsers";
@@ -19,21 +19,25 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
     }
     const { newMessage, setNewMessage } = newMessageContext;
 
-    const {users, loading, error} = useUsers();
+    const { users, loading, error } = useUsers();
 
     return (
-        <aside className="glass-panel h-full rounded-3xl p-4 text-slate-100">
+        <aside className="glass-panel flex h-full flex-col rounded-3xl p-4 text-slate-100">
             <div className="flex items-center justify-between pb-2">
                 <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Inbox</p>
+                    <p className="text-xs uppercase tracking-[0.16em] text-slate-400">
+                        Inbox
+                    </p>
                     <h3 className="text-xl font-semibold">Conversations</h3>
                 </div>
                 <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-200 border border-white/10">
                     {users.length - 1} active
                 </span>
             </div>
-            <div className="mt-2 space-y-2 max-h-[640px] overflow-y-auto pr-1">
-                {loading && <p className="text-sm text-slate-300">Loading people...</p>}
+            <div className="mt-2 flex-1 space-y-2 overflow-y-auto pr-1">
+                {loading && (
+                    <p className="text-sm text-slate-300">Loading people...</p>
+                )}
                 {error && <p className="text-sm text-amber-300">{error}</p>}
                 {users.map((user) =>
                     user.id === currentUser.id ? null : (
@@ -47,17 +51,25 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                             onClick={() => {
                                 navigate(`${user.id}`);
                                 setSelectedConv(user.id);
-                                if (newMessage && newMessage.senderId === user.id) {
+                                if (
+                                    newMessage &&
+                                    newMessage.senderId === user.id
+                                ) {
                                     setNewMessage(undefined);
                                 }
                             }}
                         >
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="font-semibold text-white">{user.name}</p>
-                                    <p className="text-xs text-slate-300">@{user.username}</p>
+                                    <p className="font-semibold text-white">
+                                        {user.name}
+                                    </p>
+                                    <p className="text-xs text-slate-300">
+                                        @{user.username}
+                                    </p>
                                 </div>
-                                {newMessage && newMessage.senderId === user.id ? (
+                                {newMessage &&
+                                newMessage.senderId === user.id ? (
                                     <span className="inline-flex items-center gap-1 rounded-full bg-amber-200 text-amber-900 px-3 py-1 text-xs font-semibold">
                                         New
                                         <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
@@ -67,11 +79,15 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                                 )}
                             </div>
                         </button>
-                    )
+                    ),
                 )}
-                {!loading && users.filter((user) => user.id !== currentUser.id).length === 0 && (
-                    <p className="text-sm text-slate-300">No other users yet.</p>
-                )}
+                {!loading &&
+                    users.filter((user) => user.id !== currentUser.id)
+                        .length === 0 && (
+                        <p className="text-sm text-slate-300">
+                            No other users yet.
+                        </p>
+                    )}
             </div>
         </aside>
     );

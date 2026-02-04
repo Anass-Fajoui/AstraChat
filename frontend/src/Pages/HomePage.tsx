@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Outlet, useParams } from "react-router";
+import { Outlet, useParams } from "react-router-dom";
 import Header from "../Components/Header";
 import UserList from "../Components/UserList";
 import { useStompClient } from "../Hooks/useStompClient";
 
 const HomePage = () => {
     const [selectedConv, setSelectedConv] = useState<string>("");
-    const {stompClient} = useStompClient();
-    const {receiverId} = useParams();
+    const { stompClient } = useStompClient();
+    const { receiverId } = useParams();
 
     useEffect(() => {
         if (receiverId) {
@@ -25,14 +25,16 @@ const HomePage = () => {
 
     return (
         <div className="min-h-screen px-4 py-6 md:px-8 lg:px-12">
-            <div className="mx-auto max-w-7xl space-y-6">
+            <div className="mx-auto flex max-w-7xl flex-col gap-6">
                 <Header setSelectedConv={setSelectedConv} />
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-[320px,1fr]">
-                    <UserList
-                        selectedConv={selectedConv}
-                        setSelectedConv={setSelectedConv}
-                    />
-                    <div className="glass-panel min-h-[640px] rounded-3xl overflow-hidden">
+                <div className="flex h-[calc(100vh-200px)] min-h-[640px] gap-4">
+                    <div className="w-[320px] shrink-0">
+                        <UserList
+                            selectedConv={selectedConv}
+                            setSelectedConv={setSelectedConv}
+                        />
+                    </div>
+                    <div className="glass-panel flex-1 rounded-3xl overflow-hidden">
                         <Outlet />
                     </div>
                 </div>

@@ -28,7 +28,7 @@ const SignUpPage = () => {
                     name: response.name,
                     username: response.username,
                     email: response.email,
-                })
+                }),
             );
             navigate("/chat");
         } catch (error: any) {
@@ -58,17 +58,26 @@ const SignUpPage = () => {
                             Onboard to Astra Chat
                         </h2>
                         <p className="text-slate-200/80 max-w-md">
-                            Set up your identity and jump into fluid, real-time conversations with a polished interface.
+                            Set up your identity and jump into fluid, real-time
+                            conversations with a polished interface.
                         </p>
                     </div>
                     <div className="relative grid grid-cols-2 gap-3 text-sm text-slate-100/80">
                         <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">Session</p>
-                            <p className="text-lg font-semibold">Persistent Login</p>
+                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
+                                Session
+                            </p>
+                            <p className="text-lg font-semibold">
+                                Persistent Login
+                            </p>
                         </div>
                         <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">Delivery</p>
-                            <p className="text-lg font-semibold">Realtime Streams</p>
+                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
+                                Delivery
+                            </p>
+                            <p className="text-lg font-semibold">
+                                Realtime Streams
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -82,28 +91,42 @@ const SignUpPage = () => {
                             Sign Up
                             <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
                         </p>
-                        <h2 className="text-2xl font-semibold text-white">Create an account</h2>
-                        <p className="text-slate-300 text-sm">We will set up your profile and keep you logged in.</p>
+                        <h2 className="text-2xl font-semibold text-white">
+                            Create an account
+                        </h2>
+                        <p className="text-slate-300 text-sm">
+                            We will set up your profile and keep you logged in.
+                        </p>
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="name" className="text-sm font-medium text-slate-200">
+                        <label
+                            htmlFor="name"
+                            className="text-sm font-medium text-slate-200"
+                        >
                             Name
                         </label>
                         <input
-                            {...register("name", { required: "Name is required" })}
+                            {...register("name", {
+                                required: "Name is required",
+                            })}
                             id="name"
                             type="text"
                             placeholder="Jane Doe"
                             className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
                         />
                         {errors.name && (
-                            <p className="text-sm text-amber-300">{errors.name.message}</p>
+                            <p className="text-sm text-amber-300">
+                                {errors.name.message}
+                            </p>
                         )}
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="username" className="text-sm font-medium text-slate-200">
+                        <label
+                            htmlFor="username"
+                            className="text-sm font-medium text-slate-200"
+                        >
                             Username
                         </label>
                         <input
@@ -123,7 +146,10 @@ const SignUpPage = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium text-slate-200">
+                        <label
+                            htmlFor="email"
+                            className="text-sm font-medium text-slate-200"
+                        >
                             Email
                         </label>
                         <input
@@ -136,12 +162,17 @@ const SignUpPage = () => {
                             className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
                         />
                         {errors.email && (
-                            <p className="text-sm text-amber-300">{errors.email.message}</p>
+                            <p className="text-sm text-amber-300">
+                                {errors.email.message}
+                            </p>
                         )}
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="password" className="text-sm font-medium text-slate-200">
+                        <label
+                            htmlFor="password"
+                            className="text-sm font-medium text-slate-200"
+                        >
                             Password
                         </label>
                         <input
@@ -169,7 +200,10 @@ const SignUpPage = () => {
 
                     <div className="flex items-center justify-between text-sm text-slate-300">
                         <span>Already registered?</span>
-                        <Link to="/login" className="font-semibold text-emerald-300 hover:text-emerald-200">
+                        <Link
+                            to="/login"
+                            className="font-semibold text-emerald-300 hover:text-emerald-200"
+                        >
                             Go to login
                         </Link>
                     </div>

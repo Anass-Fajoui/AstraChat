@@ -1,35 +1,47 @@
 import { type Message } from "../types/types";
 import { getStoredUser } from "../utils/Storage";
 
+const MessageItem = ({
+    message,
+    receiverName,
+}: {
+    message: Message;
+    receiverName: string | undefined;
+}) => {
+    const currentUser = getStoredUser();
+    const isMine = currentUser.id === message.senderId;
 
-const MessageItem = ({ message, receiverName}: {message: Message, receiverName: string | undefined}) => {
-    const currentUser = getStoredUser(); 
-    
     return (
         <div
-            className={
-                currentUser.id === message.senderId
-                    ? "m-2 flex justify-start"
-                    : "m-2 flex justify-end"
-            }
+            className={`flex ${isMine ? "justify-end" : "justify-start"} px-1`}
         >
-            <div>
+            <div className="max-w-[70ch] space-y-1">
+                <div
+                    className={`text-xs font-semibold ${isMine ? "text-cyan-200" : "text-emerald-200"}`}
+                >
+                    {isMine ? "You" : receiverName}
+                </div>
                 <div
                     className={
-                        currentUser.id  === message.senderId
-                            ? "text-left"
-                            : "text-right"
+                        "relative rounded-3xl px-4 py-3 text-sm leading-relaxed shadow-lg" +
+                        (isMine
+                            ? " bg-gradient-to-br from-cyan-500 to-emerald-400 text-slate-900"
+                            : " bg-white/10 text-slate-100 border border-white/5")
                     }
                 >
-                    {currentUser.id  === message.senderId ? "You" : receiverName}
-                </div>
-                <div className="py-2 px-4 bg-blue-500 max-w-xs lg:max-w-md rounded-3xl text-white whitespace-normal break-words">
-                    {message.content}
+                    <span className="block whitespace-pre-wrap break-words">
+                        {message.content}
+                    </span>
+                    <span
+                        className={
+                            "absolute -bottom-1 right-4 h-2 w-2 rounded-full" +
+                            (isMine ? " bg-emerald-500" : " bg-cyan-400")
+                        }
+                    />
                 </div>
             </div>
         </div>
     );
-    
 };
 
 export default MessageItem;

@@ -33,7 +33,7 @@ const LoginPage = () => {
                     name: response.name,
                     username: response.username,
                     email: response.email,
-                })
+                }),
             );
             navigate("/chat");
         } catch (error: any) {
@@ -63,16 +63,23 @@ const LoginPage = () => {
                             Welcome back to Astra Chat
                         </h2>
                         <p className="text-slate-200/80 max-w-md">
-                            Crisp typography, soft gradients, and a focus on clarity make every conversation feel intentional.
+                            Crisp typography, soft gradients, and a focus on
+                            clarity make every conversation feel intentional.
                         </p>
                     </div>
                     <div className="relative grid grid-cols-2 gap-3 text-sm text-slate-100/80">
                         <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">Signal</p>
-                            <p className="text-lg font-semibold">Realtime STOMP</p>
+                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
+                                Signal
+                            </p>
+                            <p className="text-lg font-semibold">
+                                Realtime STOMP
+                            </p>
                         </div>
                         <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">Identity</p>
+                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
+                                Identity
+                            </p>
                             <p className="text-lg font-semibold">JWT Session</p>
                         </div>
                     </div>
@@ -87,12 +94,19 @@ const LoginPage = () => {
                             Login
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                         </p>
-                        <h2 className="text-2xl font-semibold text-white">Enter the workspace</h2>
-                        <p className="text-slate-300 text-sm">Use your credentials to continue the conversation.</p>
+                        <h2 className="text-2xl font-semibold text-white">
+                            Enter the workspace
+                        </h2>
+                        <p className="text-slate-300 text-sm">
+                            Use your credentials to continue the conversation.
+                        </p>
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium text-slate-200">
+                        <label
+                            htmlFor="email"
+                            className="text-sm font-medium text-slate-200"
+                        >
                             Email
                         </label>
                         <input
@@ -105,12 +119,17 @@ const LoginPage = () => {
                             className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
                         />
                         {errors.email && (
-                            <p className="text-sm text-amber-300">{errors.email.message}</p>
+                            <p className="text-sm text-amber-300">
+                                {errors.email.message}
+                            </p>
                         )}
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="password" className="text-sm font-medium text-slate-200">
+                        <label
+                            htmlFor="password"
+                            className="text-sm font-medium text-slate-200"
+                        >
                             Password
                         </label>
                         <input
@@ -138,7 +157,10 @@ const LoginPage = () => {
 
                     <div className="flex items-center justify-between text-sm text-slate-300">
                         <span>Need an account?</span>
-                        <Link to="/signup" className="font-semibold text-cyan-300 hover:text-cyan-200">
+                        <Link
+                            to="/signup"
+                            className="font-semibold text-cyan-300 hover:text-cyan-200"
+                        >
                             Create one
                         </Link>
                     </div>
