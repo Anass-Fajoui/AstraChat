@@ -3,7 +3,8 @@ export type Message = {
     chatId: string,
     senderId: string,
     receiverId: string,
-    content: string
+    content: string,
+    timestamp?: string
 }
 
 export type LoginFormValue = {
@@ -31,4 +32,14 @@ export type User = {
     name: string,
     username: string,
     email: string
+}
+
+export type Conversation = {
+    odUserId: string,
+    name: string,
+    username: string,
+    lastMessage: string | null,
+    lastMessageTime: string | null,
+    lastMessageSenderId: string | null,
+    unreadCount: number
 }

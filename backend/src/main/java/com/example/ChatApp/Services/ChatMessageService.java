@@ -6,6 +6,7 @@ import com.example.ChatApp.Repositories.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -17,19 +18,19 @@ public class ChatMessageService {
     public ChatMessage addChatMessage(ChatMessageRequest request) {
         String chatRoomId = chatRoomService.getChatRoomId(
                 request.getSenderId(),
-                request.getReceiverId()
-        );
+                request.getReceiverId());
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatId(chatRoomId)
                 .senderId(request.getSenderId())
                 .receiverId(request.getReceiverId())
                 .content(request.getContent())
+                .timestamp(Instant.now())
                 .build();
         return chatMessageRepository.save(chatMessage);
     }
 
     public List<ChatMessage> getChatMessagesBySenderAndReceiver(String senderId, String receiverId) {
         String chatRoomId = chatRoomService.getChatRoomId(senderId, receiverId);
-        return chatMessageRepository.findByChatId(chatRoomId);
+        return chatMessageRepository.findByChatIdOrderByTimestampAsc(chatRoomId);
     }
 }
