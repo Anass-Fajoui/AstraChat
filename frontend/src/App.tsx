@@ -7,16 +7,17 @@ import { StompClientContext } from "./Context/StompClientContext";
 import { NewMessageContext } from "./Context/NewMessageContext";
 import { Client } from "@stomp/stompjs";
 import SignUpPage from "./Pages/SignUpPage";
+import SettingsPage from "./Pages/SettingsPage";
 import ConversationArea from "./Components/ConversationArea";
 import EmptyConversation from "./Components/EmptyConversation";
 import type { Message } from "./types/types";
 
 function App() {
     const [stompClient, setStompClient] = useState<Client | undefined>(
-        undefined
+        undefined,
     );
     const [newMessage, setNewMessage] = useState<Message | undefined>(
-        undefined
+        undefined,
     );
 
     return (
@@ -41,6 +42,14 @@ function App() {
                 <Route path="" element={<EmptyConversation />} />
                 <Route path=":receiverId" element={<ConversationArea />} />
             </Route>
+            <Route
+                path="/settings"
+                element={
+                    <ProtectedRoute>
+                        <SettingsPage />
+                    </ProtectedRoute>
+                }
+            />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
         </Routes>

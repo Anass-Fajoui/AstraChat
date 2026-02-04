@@ -15,6 +15,7 @@ public class ConversationDTO {
     private String odUserId;
     private String name;
     private String username;
+    private String avatarUrl;
     private String lastMessage;
     private Instant lastMessageTime;
     private String lastMessageSenderId;

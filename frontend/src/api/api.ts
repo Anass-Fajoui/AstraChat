@@ -1,6 +1,6 @@
 import axios from "axios"
 import { getStoredUser } from "../utils/Storage"
-import type { RegisterFormValue, LoginFormValue, User, Conversation } from "../types/types";
+import type { RegisterFormValue, LoginFormValue, User, Conversation, ProfileUpdateRequest, PasswordChangeRequest } from "../types/types";
 
 const getAuthHeaders = () => ({
     Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -65,5 +65,61 @@ export async function fetchConversations(userId: string): Promise<Conversation[]
         headers: getAuthHeaders()
     });
     
+    return response.data;
+}
+
+/**
+ * Get user profile
+ */
+export async function fetchProfile(userId: string): Promise<User> {
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/profile/${userId}`, {
+        headers: getAuthHeaders()
+    });
+    return response.data;
+}
+
+/**
+ * Update user profile
+ */
+export async function updateProfile(userId: string, data: ProfileUpdateRequest): Promise<User> {
+    const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/profile/${userId}`, data, {
+        headers: getAuthHeaders()
+    });
+    return response.data;
+}
+
+/**
+ * Change password
+ */
+export async function changePassword(userId: string, data: PasswordChangeRequest): Promise<{ message: string }> {
+    const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/profile/${userId}/password`, data, {
+        headers: getAuthHeaders()
+    });
+    return response.data;
+}
+
+/**
+ * Upload avatar
+ */
+export async function uploadAvatar(userId: string, file: File): Promise<User> {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/profile/${userId}/avatar`, formData, {
+        headers: {
+            ...getAuthHeaders(),
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response.data;
+}
+
+/**
+ * Delete avatar
+ */
+export async function deleteAvatar(userId: string): Promise<{ message: string }> {
+    const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/profile/${userId}/avatar`, {
+        headers: getAuthHeaders()
+    });
     return response.data;
 }

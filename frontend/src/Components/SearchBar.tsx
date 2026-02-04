@@ -128,8 +128,16 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
                             onClick={() => handleUserClick(user)}
                             className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-cyan-500/10"
                         >
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900">
-                                {user.name.slice(0, 1).toUpperCase()}
+                            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900">
+                                {user.avatarUrl ? (
+                                    <img
+                                        src={user.avatarUrl}
+                                        alt={user.name}
+                                        className="h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    user.name.slice(0, 1).toUpperCase()
+                                )}
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="font-medium text-white truncate">

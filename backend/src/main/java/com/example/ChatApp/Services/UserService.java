@@ -87,6 +87,7 @@ public class UserService {
                     .odUserId(otherUser.getId())
                     .name(otherUser.getName())
                     .username(otherUser.getUsername())
+                    .avatarUrl(otherUser.getAvatarUrl())
                     .unreadCount(0); // Can be enhanced with read receipts later
 
             if (lastMessageOpt.isPresent()) {

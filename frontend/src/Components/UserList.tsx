@@ -151,8 +151,16 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                     >
                         <div className="flex items-start gap-3">
                             {/* Avatar */}
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900">
-                                {conv.name.slice(0, 1).toUpperCase()}
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900">
+                                {conv.avatarUrl ? (
+                                    <img
+                                        src={conv.avatarUrl}
+                                        alt={conv.name}
+                                        className="h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    conv.name.slice(0, 1).toUpperCase()
+                                )}
                             </div>
 
                             {/* Content */}

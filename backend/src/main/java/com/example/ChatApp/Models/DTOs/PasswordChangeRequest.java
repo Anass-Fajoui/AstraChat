@@ -9,16 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private String id;
-
-    private String name;
-
-    private String username;
-
-    private String email;
-
-    private String avatarUrl;
-
-    private String bio;
+public class PasswordChangeRequest {
+    private String currentPassword;
+    private String newPassword;
 }

@@ -75,7 +75,21 @@ const ConversationArea = () => {
                         Chatting with
                     </p>
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400" />
+                        <div className="h-10 w-10 overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400">
+                            {receiverUser?.avatarUrl ? (
+                                <img
+                                    src={receiverUser.avatarUrl}
+                                    alt={receiverUser.name}
+                                    className="h-full w-full object-cover"
+                                />
+                            ) : (
+                                <div className="flex h-full w-full items-center justify-center font-semibold text-slate-900">
+                                    {receiverUser?.name
+                                        ?.charAt(0)
+                                        .toUpperCase() || "?"}
+                                </div>
+                            )}
+                        </div>
                         <div>
                             <p className="text-lg font-semibold">
                                 {receiverUser ? receiverUser.name : "Loading"}

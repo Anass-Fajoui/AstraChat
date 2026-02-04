@@ -35,9 +35,10 @@ public class SecurityConfig {
         return http.csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/ws/**").permitAll()
-                    .anyRequest().authenticated()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/ws/**").permitAll()
+                .requestMatchers("/api/files/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -68,4 +69,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

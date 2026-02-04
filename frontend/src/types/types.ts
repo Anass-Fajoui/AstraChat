@@ -24,14 +24,18 @@ export type AuthResponse = {
     name: string,
     username: string,
     email: string,
-    token: string
+    token: string,
+    avatarUrl?: string,
+    bio?: string
 }
 
 export type User = {
     id: string,
     name: string,
     username: string,
-    email: string
+    email: string,
+    avatarUrl?: string,
+    bio?: string
 }
 
 export type Conversation = {
@@ -41,5 +45,18 @@ export type Conversation = {
     lastMessage: string | null,
     lastMessageTime: string | null,
     lastMessageSenderId: string | null,
-    unreadCount: number
+    unreadCount: number,
+    avatarUrl?: string
+}
+
+export type ProfileUpdateRequest = {
+    name?: string,
+    username?: string,
+    email?: string,
+    bio?: string
+}
+
+export type PasswordChangeRequest = {
+    currentPassword: string,
+    newPassword: string
 }
