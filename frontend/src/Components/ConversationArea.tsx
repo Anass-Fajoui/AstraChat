@@ -8,6 +8,49 @@ import { NewMessageContext } from "../Context/NewMessageContext";
 import { useMessages } from "../Hooks/useMessages";
 import { useUser } from "../Hooks/useUser";
 
+// Helper function to format date separator
+const formatDateSeparator = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // Reset time for comparison
+    const dateOnly = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+    );
+    const todayOnly = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+    );
+    const yesterdayOnly = new Date(
+        yesterday.getFullYear(),
+        yesterday.getMonth(),
+        yesterday.getDate(),
+    );
+
+    if (dateOnly.getTime() === todayOnly.getTime()) {
+        return "Today";
+    } else if (dateOnly.getTime() === yesterdayOnly.getTime()) {
+        return "Yesterday";
+    } else {
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+};
+
+// Helper function to get date string (YYYY-MM-DD) for grouping
+const getDateKey = (timestamp?: string): string => {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+};
+
 const ConversationArea = () => {
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -138,13 +181,35 @@ const ConversationArea = () => {
                             There are no messages yet. Say hi!
                         </p>
                     )}
-                    {messages.map((msg) => (
-                        <MessageItem
-                            key={msg.id}
-                            message={msg}
-                            receiverName={receiverUser?.name}
-                        />
-                    ))}
+                    {messages.map((msg, index) => {
+                        const currentDateKey = getDateKey(msg.timestamp);
+                        const prevDateKey =
+                            index > 0
+                                ? getDateKey(messages[index - 1].timestamp)
+                                : null;
+                        const showDateSeparator =
+                            currentDateKey && currentDateKey !== prevDateKey;
+
+                        return (
+                            <div key={msg.id || index}>
+                                {showDateSeparator && (
+                                    <div className="flex items-center gap-4 my-4">
+                                        <div className="flex-1 h-px bg-white/10" />
+                                        <span className="px-3 py-1 rounded-full bg-slate-800/80 text-xs font-medium text-slate-400 border border-white/10">
+                                            {formatDateSeparator(
+                                                msg.timestamp!,
+                                            )}
+                                        </span>
+                                        <div className="flex-1 h-px bg-white/10" />
+                                    </div>
+                                )}
+                                <MessageItem
+                                    message={msg}
+                                    receiverName={receiverUser?.name}
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
