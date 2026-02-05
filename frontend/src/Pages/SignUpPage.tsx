@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Register } from "../api/api";
@@ -16,10 +17,14 @@ const SignUpPage = () => {
         formState: { errors },
     } = useForm<RegisterFormValue>();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const onSubmit = async (data: RegisterFormValue) => {
+        setIsLoading(true);
+        setErrorMessage("");
         try {
-            let response = await Register(data);
+            const response = await Register(data);
             localStorage.setItem("token", response.token);
             localStorage.setItem(
                 "user",
@@ -31,183 +36,399 @@ const SignUpPage = () => {
                 }),
             );
             navigate("/chat");
-        } catch (error: any) {
-            if (error.response) {
-                console.log("Server  error: ", error.response.data);
-                alert(error.response.data.message || "Registration Error");
-            } else if (error.request) {
-                console.log("Network error:", error.request);
-                alert("No response from server. Please try again later.");
+        } catch (error: unknown) {
+            const err = error as {
+                response?: { data?: { message?: string } };
+                request?: unknown;
+            };
+            if (err.response) {
+                setErrorMessage(
+                    err.response.data?.message || "Registration failed",
+                );
+            } else if (err.request) {
+                setErrorMessage(
+                    "Unable to connect to server. Please try again.",
+                );
             } else {
-                console.log("Unexpected error:", error.message);
-                alert("Unexpected error occurred.");
+                setErrorMessage("An unexpected error occurred.");
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-6 py-12">
-            <div className="glass-panel w-full max-w-5xl grid grid-cols-1 md:grid-cols-[1.05fr_1fr] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                <div className="relative hidden md:flex flex-col justify-between p-10 bg-gradient-to-br from-emerald-400/25 via-cyan-500/25 to-blue-500/20">
-                    <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_25%_20%,rgba(16,185,129,0.38),transparent_38%),radial-gradient(circle_at_75%_30%,rgba(14,165,233,0.32),transparent_32%)]" />
-                    <div className="relative space-y-4">
-                        <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-sm font-medium text-emerald-50 border border-white/15">
-                            Create your space
-                        </p>
-                        <h2 className="text-3xl font-semibold text-slate-50 leading-tight">
-                            Onboard to Astra Chat
-                        </h2>
-                        <p className="text-slate-200/80 max-w-md">
-                            Set up your identity and jump into fluid, real-time
-                            conversations with a polished interface.
-                        </p>
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+            {/* Animated background elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 blur-3xl animate-pulse" />
+                <div
+                    className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 blur-3xl animate-pulse"
+                    style={{ animationDelay: "1s" }}
+                />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-gradient-to-br from-cyan-500/10 to-emerald-500/10 blur-3xl" />
+            </div>
+
+            <div className="w-full max-w-md relative z-10">
+                {/* Logo and Title */}
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 to-cyan-400 shadow-2xl shadow-emerald-500/30 mb-6">
+                        <svg
+                            className="w-10 h-10 text-slate-900"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                            />
+                        </svg>
                     </div>
-                    <div className="relative grid grid-cols-2 gap-3 text-sm text-slate-100/80">
-                        <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
-                                Session
-                            </p>
-                            <p className="text-lg font-semibold">
-                                Persistent Login
-                            </p>
-                        </div>
-                        <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
-                                Delivery
-                            </p>
-                            <p className="text-lg font-semibold">
-                                Realtime Streams
-                            </p>
-                        </div>
-                    </div>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-300 via-cyan-300 to-sky-300 bg-clip-text text-transparent mb-2">
+                        Join Astra Chat
+                    </h1>
+                    <p className="text-slate-400">
+                        Create your account and start connecting
+                    </p>
                 </div>
 
-                <form
-                    className="relative flex flex-col gap-6 p-10 bg-slate-950/60 backdrop-blur"
-                    onSubmit={handleSubmit(onSubmit)}
-                >
-                    <div className="space-y-2">
-                        <p className="inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-4 py-1 text-xs font-medium text-emerald-200 border border-white/10">
-                            Sign Up
-                            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
-                        </p>
-                        <h2 className="text-2xl font-semibold text-white">
-                            Create an account
+                {/* Sign Up Card */}
+                <div className="glass-panel rounded-3xl p-8 border border-white/10 shadow-2xl backdrop-blur-xl">
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-semibold text-white mb-1">
+                            Create account
                         </h2>
-                        <p className="text-slate-300 text-sm">
-                            We will set up your profile and keep you logged in.
+                        <p className="text-slate-400 text-sm">
+                            Fill in your details to get started
                         </p>
                     </div>
 
-                    <div className="space-y-2">
-                        <label
-                            htmlFor="name"
-                            className="text-sm font-medium text-slate-200"
-                        >
-                            Name
-                        </label>
-                        <input
-                            {...register("name", {
-                                required: "Name is required",
-                            })}
-                            id="name"
-                            type="text"
-                            placeholder="Jane Doe"
-                            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
-                        />
-                        {errors.name && (
-                            <p className="text-sm text-amber-300">
-                                {errors.name.message}
+                    {/* Error Message */}
+                    {errorMessage && (
+                        <div className="mb-6 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 flex items-center gap-3">
+                            <svg
+                                className="w-5 h-5 text-red-400 shrink-0"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <p className="text-sm text-red-300">
+                                {errorMessage}
                             </p>
-                        )}
-                    </div>
+                        </div>
+                    )}
 
-                    <div className="space-y-2">
-                        <label
-                            htmlFor="username"
-                            className="text-sm font-medium text-slate-200"
-                        >
-                            Username
-                        </label>
-                        <input
-                            {...register("username", {
-                                required: "Username is required",
-                            })}
-                            id="username"
-                            type="text"
-                            placeholder="astrofan"
-                            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
-                        />
-                        {errors.username && (
-                            <p className="text-sm text-amber-300">
-                                {errors.username.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="space-y-2">
-                        <label
-                            htmlFor="email"
-                            className="text-sm font-medium text-slate-200"
-                        >
-                            Email
-                        </label>
-                        <input
-                            {...register("email", {
-                                required: "Email is required",
-                            })}
-                            id="email"
-                            type="email"
-                            placeholder="you@email.com"
-                            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
-                        />
-                        {errors.email && (
-                            <p className="text-sm text-amber-300">
-                                {errors.email.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="space-y-2">
-                        <label
-                            htmlFor="password"
-                            className="text-sm font-medium text-slate-200"
-                        >
-                            Password
-                        </label>
-                        <input
-                            {...register("password", {
-                                required: "Password is required",
-                            })}
-                            id="password"
-                            type="password"
-                            placeholder="••••••••"
-                            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
-                        />
-                        {errors.password && (
-                            <p className="text-sm text-amber-300">
-                                {errors.password.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="mt-2 inline-flex justify-center items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-400 to-cyan-500 px-5 py-3 text-base font-semibold text-slate-900 shadow-lg shadow-emerald-400/30 transition hover:shadow-cyan-500/30"
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-4"
                     >
-                        Create account
-                    </button>
+                        {/* Name Field */}
+                        <div className="space-y-2">
+                            <label
+                                htmlFor="name"
+                                className="block text-sm font-medium text-slate-300"
+                            >
+                                Full Name
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg
+                                        className="w-5 h-5 text-slate-500"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={1.5}
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                        />
+                                    </svg>
+                                </div>
+                                <input
+                                    {...register("name", {
+                                        required: "Name is required",
+                                        minLength: {
+                                            value: 2,
+                                            message:
+                                                "Name must be at least 2 characters",
+                                        },
+                                    })}
+                                    id="name"
+                                    type="text"
+                                    placeholder="Jane Doe"
+                                    className="w-full rounded-xl border border-white/10 bg-white/5 pl-12 pr-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all"
+                                />
+                            </div>
+                            {errors.name && (
+                                <p className="text-sm text-amber-400 flex items-center gap-1">
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 9v2m0 4h.01"
+                                        />
+                                    </svg>
+                                    {errors.name.message}
+                                </p>
+                            )}
+                        </div>
 
-                    <div className="flex items-center justify-between text-sm text-slate-300">
-                        <span>Already registered?</span>
+                        {/* Username Field */}
+                        <div className="space-y-2">
+                            <label
+                                htmlFor="username"
+                                className="block text-sm font-medium text-slate-300"
+                            >
+                                Username
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg
+                                        className="w-5 h-5 text-slate-500"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={1.5}
+                                            d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                                        />
+                                    </svg>
+                                </div>
+                                <input
+                                    {...register("username", {
+                                        required: "Username is required",
+                                        minLength: {
+                                            value: 3,
+                                            message:
+                                                "Username must be at least 3 characters",
+                                        },
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9_]+$/,
+                                            message:
+                                                "Only letters, numbers and underscores",
+                                        },
+                                    })}
+                                    id="username"
+                                    type="text"
+                                    placeholder="astrofan"
+                                    className="w-full rounded-xl border border-white/10 bg-white/5 pl-12 pr-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all"
+                                />
+                            </div>
+                            {errors.username && (
+                                <p className="text-sm text-amber-400 flex items-center gap-1">
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 9v2m0 4h.01"
+                                        />
+                                    </svg>
+                                    {errors.username.message}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Email Field */}
+                        <div className="space-y-2">
+                            <label
+                                htmlFor="email"
+                                className="block text-sm font-medium text-slate-300"
+                            >
+                                Email address
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg
+                                        className="w-5 h-5 text-slate-500"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={1.5}
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                        />
+                                    </svg>
+                                </div>
+                                <input
+                                    {...register("email", {
+                                        required: "Email is required",
+                                        pattern: {
+                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                            message: "Invalid email address",
+                                        },
+                                    })}
+                                    id="email"
+                                    type="email"
+                                    placeholder="you@example.com"
+                                    className="w-full rounded-xl border border-white/10 bg-white/5 pl-12 pr-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all"
+                                />
+                            </div>
+                            {errors.email && (
+                                <p className="text-sm text-amber-400 flex items-center gap-1">
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 9v2m0 4h.01"
+                                        />
+                                    </svg>
+                                    {errors.email.message}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Password Field */}
+                        <div className="space-y-2">
+                            <label
+                                htmlFor="password"
+                                className="block text-sm font-medium text-slate-300"
+                            >
+                                Password
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg
+                                        className="w-5 h-5 text-slate-500"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={1.5}
+                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                        />
+                                    </svg>
+                                </div>
+                                <input
+                                    {...register("password", {
+                                        required: "Password is required",
+                                        minLength: {
+                                            value: 6,
+                                            message:
+                                                "Password must be at least 6 characters",
+                                        },
+                                    })}
+                                    id="password"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    className="w-full rounded-xl border border-white/10 bg-white/5 pl-12 pr-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all"
+                                />
+                            </div>
+                            {errors.password && (
+                                <p className="text-sm text-amber-400 flex items-center gap-1">
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 9v2m0 4h.01"
+                                        />
+                                    </svg>
+                                    {errors.password.message}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 py-3.5 text-base font-semibold text-slate-900 shadow-lg shadow-emerald-500/25 transition-all hover:shadow-emerald-500/40 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
+                                    Creating account...
+                                </>
+                            ) : (
+                                <>
+                                    Create account
+                                    <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                        />
+                                    </svg>
+                                </>
+                            )}
+                        </button>
+                    </form>
+
+                    {/* Divider */}
+                    <div className="my-6 flex items-center gap-4">
+                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                        <span className="text-xs text-slate-500 uppercase tracking-wider">
+                            or
+                        </span>
+                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                    </div>
+
+                    {/* Login Link */}
+                    <p className="text-center text-slate-400">
+                        Already have an account?{" "}
                         <Link
                             to="/login"
-                            className="font-semibold text-emerald-300 hover:text-emerald-200"
+                            className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
                         >
-                            Go to login
+                            Sign in
                         </Link>
-                    </div>
-                </form>
+                    </p>
+                </div>
+
+                {/* Footer */}
+                <p className="text-center text-slate-600 text-sm mt-8">
+                    © 2026 Astra Chat. Secure messaging for everyone.
+                </p>
             </div>
         </div>
     );
