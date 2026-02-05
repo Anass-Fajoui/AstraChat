@@ -397,8 +397,7 @@ const ConversationArea = () => {
                     type="submit"
                     className="inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
                     style={{
-                        background:
-                            "linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%)",
+                        backgroundColor: "var(--accent)",
                         boxShadow: "0 4px 12px rgba(14, 165, 233, 0.3)",
                     }}
                     onMouseEnter={(e) => {

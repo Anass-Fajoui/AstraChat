@@ -327,8 +327,7 @@ const LoginPage = () => {
                             disabled={isLoading}
                             className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
                             style={{
-                                background:
-                                    "linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%)",
+                                backgroundColor: "var(--accent)",
                                 boxShadow: "0 4px 12px rgba(14, 165, 233, 0.3)",
                             }}
                             onMouseEnter={(e) => {
