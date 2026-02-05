@@ -59,22 +59,30 @@ public class DataInitializer implements CommandLineRunner {
                     "Data scientist | ML & AI"),
             new DemoUser("Jack Taylor", "jack", "jack@demo.com", "password123",
                     "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=150&h=150&fit=crop&crop=face",
-                    "Security engineer | Keeping systems safe")
-    );
+                    "Security engineer | Keeping systems safe"));
 
     // Sample conversation messages
     private static final List<String[]> CONVERSATIONS = List.of(
-            new String[]{"Hey! How's the new project going?", "It's going great! Just finished the API design.", "Nice! Can't wait to see it in action.", "I'll demo it tomorrow at standup."},
-            new String[]{"Did you see the latest tech news?", "Yeah, the new framework looks promising!", "We should try it on our next project.", "Agreed, let's discuss it with the team."},
-            new String[]{"Coffee break?", "Sure! Meet you in 5 minutes.", "Perfect, see you there!", "☕"},
-            new String[]{"The code review is done.", "Any major issues?", "Just a few minor suggestions.", "I'll fix them right away. Thanks!"},
-            new String[]{"Happy Friday! 🎉", "Finally! Any plans for the weekend?", "Thinking of going hiking.", "That sounds amazing! Have fun!"},
-            new String[]{"Quick question about the database schema.", "Sure, what's up?", "Should we normalize the user preferences table?", "Good idea, let's create a migration for that."},
-            new String[]{"The deployment was successful!", "Awesome! No issues in production?", "Everything looks stable.", "Great job team! 🚀"},
-            new String[]{"Can you help me with this bug?", "Of course! What's happening?", "The websocket connection keeps dropping.", "Let me check the logs. I think I know what it is."},
-            new String[]{"Meeting in 10 minutes.", "On my way!", "Don't forget the presentation.", "Got it, thanks for the reminder!"},
-            new String[]{"The new feature is live!", "Users are loving it!", "We got 100 signups in the first hour.", "This is incredible! Great work everyone!"}
-    );
+            new String[] { "Hey! How's the new project going?", "It's going great! Just finished the API design.",
+                    "Nice! Can't wait to see it in action.", "I'll demo it tomorrow at standup." },
+            new String[] { "Did you see the latest tech news?", "Yeah, the new framework looks promising!",
+                    "We should try it on our next project.", "Agreed, let's discuss it with the team." },
+            new String[] { "Coffee break?", "Sure! Meet you in 5 minutes.", "Perfect, see you there!", "☕" },
+            new String[] { "The code review is done.", "Any major issues?", "Just a few minor suggestions.",
+                    "I'll fix them right away. Thanks!" },
+            new String[] { "Happy Friday! 🎉", "Finally! Any plans for the weekend?", "Thinking of going hiking.",
+                    "That sounds amazing! Have fun!" },
+            new String[] { "Quick question about the database schema.", "Sure, what's up?",
+                    "Should we normalize the user preferences table?",
+                    "Good idea, let's create a migration for that." },
+            new String[] { "The deployment was successful!", "Awesome! No issues in production?",
+                    "Everything looks stable.", "Great job team! 🚀" },
+            new String[] { "Can you help me with this bug?", "Of course! What's happening?",
+                    "The websocket connection keeps dropping.", "Let me check the logs. I think I know what it is." },
+            new String[] { "Meeting in 10 minutes.", "On my way!", "Don't forget the presentation.",
+                    "Got it, thanks for the reminder!" },
+            new String[] { "The new feature is live!", "Users are loving it!", "We got 100 signups in the first hour.",
+                    "This is incredible! Great work everyone!" });
 
     @Override
     public void run(String... args) {
@@ -140,7 +148,7 @@ public class DataInitializer implements CommandLineRunner {
 
                     // Create messages with timestamps going back in time
                     Instant baseTime = Instant.now().minus(random.nextInt(7), ChronoUnit.DAYS);
-                    
+
                     for (int k = 0; k < messages.length; k++) {
                         ChatMessage message = ChatMessage.builder()
                                 .chatId(chatId)
@@ -172,5 +180,6 @@ public class DataInitializer implements CommandLineRunner {
         log.info("=".repeat(60) + "\n");
     }
 
-    private record DemoUser(String name, String username, String email, String password, String avatarUrl, String bio) {}
+    private record DemoUser(String name, String username, String email, String password, String avatarUrl, String bio) {
+    }
 }

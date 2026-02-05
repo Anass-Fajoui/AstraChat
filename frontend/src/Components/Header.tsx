@@ -67,10 +67,6 @@ const Header = ({ setSelectedConv }: HeaderProps) => {
             </div>
 
             <div className="flex items-center gap-3">
-                <div className="hidden md:flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
-                    <div className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-                    Live relay via STOMP
-                </div>
                 <button
                     onClick={() => navigate("/settings")}
                     className="inline-flex items-center gap-2 rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-lg border border-white/10 transition hover:bg-white/20"

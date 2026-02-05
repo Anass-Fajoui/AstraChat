@@ -103,16 +103,12 @@ const ConversationArea = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-slate-300">
-                    {userLoading ? (
-                        <span className="rounded-full bg-white/5 px-3 py-1 border border-white/10">
-                            Resolving user...
-                        </span>
-                    ) : (
-                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                            Secure channel ready
-                        </span>
-                    )}
+                    <button
+                        onClick={() => navigate(`/profile/${receiverId}`)}
+                        className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1 text-slate-200 transition hover:border-cyan-400/60 hover:text-white"
+                    >
+                        View Profile
+                    </button>
                     <button
                         onClick={() => navigate("/chat")}
                         className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1 text-slate-200 transition hover:border-cyan-400/60 hover:text-white"

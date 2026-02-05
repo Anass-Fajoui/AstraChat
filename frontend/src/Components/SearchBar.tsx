@@ -54,6 +54,13 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
         navigate(`/chat/${user.id}`);
     };
 
+    const handleProfileClick = (userId: string) => {
+        setQuery("");
+        setIsOpen(false);
+        clearSearch();
+        navigate(`/profile/${userId}`);
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Escape") {
             setIsOpen(false);
@@ -123,12 +130,14 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
                         )}
 
                     {searchResults.map((user) => (
-                        <button
+                        <div
                             key={user.id}
-                            onClick={() => handleUserClick(user)}
                             className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-cyan-500/10"
                         >
-                            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900">
+                            <div
+                                onClick={() => handleProfileClick(user.id)}
+                                className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900 hover:ring-2 hover:ring-cyan-400"
+                            >
                                 {user.avatarUrl ? (
                                     <img
                                         src={user.avatarUrl}
@@ -139,28 +148,37 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
                                     user.name.slice(0, 1).toUpperCase()
                                 )}
                             </div>
-                            <div className="flex-1 min-w-0">
+                            <button
+                                onClick={() => handleUserClick(user)}
+                                className="flex-1 min-w-0 text-left"
+                            >
                                 <p className="font-medium text-white truncate">
                                     {user.name}
                                 </p>
                                 <p className="text-xs text-slate-400 truncate">
                                     @{user.username}
                                 </p>
-                            </div>
-                            <svg
-                                className="h-4 w-4 text-slate-500"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                            </button>
+                            <button
+                                onClick={() => handleUserClick(user)}
+                                className="p-2 rounded-lg hover:bg-white/10 transition"
+                                title="Start chat"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                                />
-                            </svg>
-                        </button>
+                                <svg
+                                    className="h-4 w-4 text-slate-400 hover:text-cyan-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
                     ))}
                 </div>
             )}

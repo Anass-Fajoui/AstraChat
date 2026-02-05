@@ -8,6 +8,7 @@ import { NewMessageContext } from "./Context/NewMessageContext";
 import { Client } from "@stomp/stompjs";
 import SignUpPage from "./Pages/SignUpPage";
 import SettingsPage from "./Pages/SettingsPage";
+import UserProfilePage from "./Pages/UserProfilePage";
 import ConversationArea from "./Components/ConversationArea";
 import EmptyConversation from "./Components/EmptyConversation";
 import type { Message } from "./types/types";
@@ -47,6 +48,14 @@ function App() {
                 element={
                     <ProtectedRoute>
                         <SettingsPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/profile/:userId"
+                element={
+                    <ProtectedRoute>
+                        <UserProfilePage />
                     </ProtectedRoute>
                 }
             />

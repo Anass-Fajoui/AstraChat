@@ -67,22 +67,6 @@ const LoginPage = () => {
                             clarity make every conversation feel intentional.
                         </p>
                     </div>
-                    <div className="relative grid grid-cols-2 gap-3 text-sm text-slate-100/80">
-                        <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
-                                Signal
-                            </p>
-                            <p className="text-lg font-semibold">
-                                Realtime STOMP
-                            </p>
-                        </div>
-                        <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                            <p className="text-xs uppercase tracking-[0.14em] text-slate-200/60">
-                                Identity
-                            </p>
-                            <p className="text-lg font-semibold">JWT Session</p>
-                        </div>
-                    </div>
                 </div>
 
                 <form
