@@ -4,9 +4,11 @@ import { getStoredUser } from "../utils/Storage";
 const MessageItem = ({
     message,
     receiverName,
+    showName = true,
 }: {
     message: Message;
     receiverName: string | undefined;
+    showName?: boolean;
 }) => {
     const currentUser = getStoredUser();
     const isMine = currentUser.id === message.senderId;
@@ -16,11 +18,13 @@ const MessageItem = ({
             className={`flex ${isMine ? "justify-end" : "justify-start"} px-1`}
         >
             <div className="max-w-[70ch] space-y-1">
-                <div
-                    className={`text-xs font-semibold ${isMine ? "text-cyan-200" : "text-emerald-200"}`}
-                >
-                    {isMine ? "You" : receiverName}
-                </div>
+                {showName && (
+                    <div
+                        className={`text-xs font-semibold ${isMine ? "text-cyan-200" : "text-emerald-200"}`}
+                    >
+                        {isMine ? "You" : receiverName}
+                    </div>
+                )}
                 <div
                     className={
                         "relative rounded-3xl px-4 py-3 text-sm leading-relaxed shadow-lg" +

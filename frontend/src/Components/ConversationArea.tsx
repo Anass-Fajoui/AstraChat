@@ -189,6 +189,12 @@ const ConversationArea = () => {
                                 : null;
                         const showDateSeparator =
                             currentDateKey && currentDateKey !== prevDateKey;
+                        const prevMessage =
+                            index > 0 ? messages[index - 1] : null;
+                        const showName =
+                            !prevMessage ||
+                            prevMessage.senderId !== msg.senderId ||
+                            showDateSeparator;
 
                         return (
                             <div key={msg.id || index}>
@@ -206,6 +212,7 @@ const ConversationArea = () => {
                                 <MessageItem
                                     message={msg}
                                     receiverName={receiverUser?.name}
+                                    showName={showName}
                                 />
                             </div>
                         );
