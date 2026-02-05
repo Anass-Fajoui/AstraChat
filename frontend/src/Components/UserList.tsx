@@ -189,11 +189,8 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                                     newMessage.senderId === conv.odUserId ? (
                                         <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-amber-200 text-amber-900 px-2 py-0.5 text-xs font-semibold">
                                             New
-                                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
                                         </span>
-                                    ) : (
-                                        <span className="shrink-0 h-2 w-2 rounded-full bg-emerald-400" />
-                                    )}
+                                    ) : null}
                                 </div>
                             </div>
                         </div>

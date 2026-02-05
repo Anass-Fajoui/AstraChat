@@ -32,12 +32,6 @@ const MessageItem = ({
                     <span className="block whitespace-pre-wrap break-words">
                         {message.content}
                     </span>
-                    <span
-                        className={
-                            "absolute -bottom-1 right-4 h-2 w-2 rounded-full" +
-                            (isMine ? " bg-emerald-500" : " bg-cyan-400")
-                        }
-                    />
                 </div>
             </div>
         </div>

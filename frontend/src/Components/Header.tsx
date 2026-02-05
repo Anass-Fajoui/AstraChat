@@ -59,10 +59,7 @@ const Header = ({ setSelectedConv }: HeaderProps) => {
                     <p className="text-lg font-semibold text-white">
                         {displayName}
                     </p>
-                    <p className="flex items-center gap-2 text-sm text-slate-300">
-                        <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                        Connected as {displayUsername}
-                    </p>
+                    <p className="text-sm text-slate-400">@{displayUsername}</p>
                 </div>
             </div>
 

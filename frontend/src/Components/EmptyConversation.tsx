@@ -45,7 +45,6 @@ const EmptyConversation = () => {
                 </div>
                 <span className="text-slate-600">•</span>
                 <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
                     <span>Real-time messaging</span>
                 </div>
             </div>
