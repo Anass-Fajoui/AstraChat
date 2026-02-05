@@ -5,6 +5,7 @@ import MessageItem from "./MessageItem";
 import { StompClientContext } from "../Context/StompClientContext";
 import { getStoredUser } from "../utils/Storage";
 import { NewMessageContext } from "../Context/NewMessageContext";
+import { OnlineStatusContext } from "../Context/OnlineStatusContext";
 import { useMessages } from "../Hooks/useMessages";
 import { useUser } from "../Hooks/useUser";
 
@@ -51,6 +52,35 @@ const getDateKey = (timestamp?: string): string => {
     return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 };
 
+// Helper function to format last seen time
+const formatLastSeen = (lastSeenStr?: string): string => {
+    if (!lastSeenStr) return "Unknown";
+
+    const lastSeen = new Date(lastSeenStr);
+    const now = new Date();
+    const diffMs = now.getTime() - lastSeen.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffMins < 1) {
+        return "Just now";
+    } else if (diffMins < 60) {
+        return `${diffMins} minute${diffMins !== 1 ? "s" : ""} ago`;
+    } else if (diffHours < 24) {
+        return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+    } else if (diffDays === 1) {
+        return "Yesterday";
+    } else if (diffDays < 7) {
+        return `${diffDays} days ago`;
+    } else {
+        const day = lastSeen.getDate().toString().padStart(2, "0");
+        const month = (lastSeen.getMonth() + 1).toString().padStart(2, "0");
+        const year = lastSeen.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+};
+
 const ConversationArea = () => {
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -70,9 +100,21 @@ const ConversationArea = () => {
     }
     const { newMessage, setNewMessage } = newMessageContext;
 
+    const onlineStatusContext = useContext(OnlineStatusContext);
+    const { onlineStatuses } = onlineStatusContext || {
+        onlineStatuses: new Map(),
+    };
+
     const { messages, setMessages, messagesLoading, messagesError } =
         useMessages(receiverId, newMessage);
     const { user: receiverUser, userLoading, userError } = useUser(receiverId);
+
+    // Get online status - prefer realtime updates, fallback to user data from API
+    const realtimeStatus = receiverId
+        ? onlineStatuses.get(receiverId)
+        : undefined;
+    const isOnline = realtimeStatus?.isOnline ?? receiverUser?.online ?? false;
+    const lastSeen = realtimeStatus?.lastSeen ?? receiverUser?.lastSeen;
 
     useEffect(() => {
         if (newMessage && newMessage.senderId === receiverId) {
@@ -118,29 +160,43 @@ const ConversationArea = () => {
                         Chatting with
                     </p>
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400">
-                            {receiverUser?.avatarUrl ? (
-                                <img
-                                    src={receiverUser.avatarUrl}
-                                    alt={receiverUser.name}
-                                    className="h-full w-full object-cover"
-                                />
-                            ) : (
-                                <div className="flex h-full w-full items-center justify-center font-semibold text-slate-900">
-                                    {receiverUser?.name
-                                        ?.charAt(0)
-                                        .toUpperCase() || "?"}
-                                </div>
-                            )}
+                        <div className="relative">
+                            <div className="h-10 w-10 overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400">
+                                {receiverUser?.avatarUrl ? (
+                                    <img
+                                        src={receiverUser.avatarUrl}
+                                        alt={receiverUser.name}
+                                        className="h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="flex h-full w-full items-center justify-center font-semibold text-slate-900">
+                                        {receiverUser?.name
+                                            ?.charAt(0)
+                                            .toUpperCase() || "?"}
+                                    </div>
+                                )}
+                            </div>
+                            {/* Online indicator */}
+                            <span
+                                className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-slate-900 ${
+                                    isOnline ? "bg-emerald-400" : "bg-slate-500"
+                                }`}
+                            />
                         </div>
                         <div>
                             <p className="text-lg font-semibold">
                                 {receiverUser ? receiverUser.name : "Loading"}
                             </p>
                             <p className="text-xs text-slate-400">
-                                {receiverUser
-                                    ? `@${receiverUser.username}`
-                                    : ""}
+                                {isOnline ? (
+                                    <span className="text-emerald-400">
+                                        Online
+                                    </span>
+                                ) : (
+                                    <span>
+                                        Last seen {formatLastSeen(lastSeen)}
+                                    </span>
+                                )}
                             </p>
                         </div>
                     </div>

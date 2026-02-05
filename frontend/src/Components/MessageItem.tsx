@@ -20,7 +20,7 @@ const MessageItem = ({
             <div className="max-w-[70ch] space-y-1">
                 {showName && (
                     <div
-                        className={`text-xs font-semibold ${isMine ? "text-cyan-200" : "text-emerald-200"}`}
+                        className={`text-xs font-semibold ${isMine ? "text-cyan-200 text-right" : "text-emerald-200"}`}
                     >
                         {isMine ? "You" : receiverName}
                     </div>

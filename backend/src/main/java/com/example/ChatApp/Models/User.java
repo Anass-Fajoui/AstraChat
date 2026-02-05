@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
+
 @Document(collection = "users")
 @Data
 @NoArgsConstructor
@@ -31,4 +33,8 @@ public class User {
     private String avatarUrl;
 
     private String bio;
+
+    private boolean online;
+
+    private Instant lastSeen;
 }

@@ -35,7 +35,9 @@ export type User = {
     username: string,
     email: string,
     avatarUrl?: string,
-    bio?: string
+    bio?: string,
+    online?: boolean,
+    lastSeen?: string
 }
 
 export type Conversation = {

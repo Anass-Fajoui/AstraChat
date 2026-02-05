@@ -14,6 +14,8 @@ public class UserMapper {
                 .email(user.getEmail())
                 .avatarUrl(user.getAvatarUrl())
                 .bio(user.getBio())
+                .online(user.isOnline())
+                .lastSeen(user.getLastSeen())
                 .build();
     }
 }

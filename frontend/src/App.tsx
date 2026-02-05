@@ -5,6 +5,10 @@ import { useState } from "react";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import { StompClientContext } from "./Context/StompClientContext";
 import { NewMessageContext } from "./Context/NewMessageContext";
+import {
+    OnlineStatusContext,
+    type OnlineStatus,
+} from "./Context/OnlineStatusContext";
 import { Client } from "@stomp/stompjs";
 import SignUpPage from "./Pages/SignUpPage";
 import SettingsPage from "./Pages/SettingsPage";
@@ -20,6 +24,9 @@ function App() {
     const [newMessage, setNewMessage] = useState<Message | undefined>(
         undefined,
     );
+    const [onlineStatuses, setOnlineStatuses] = useState<
+        Map<string, OnlineStatus>
+    >(new Map());
 
     return (
         <Routes>
@@ -34,7 +41,14 @@ function App() {
                             <NewMessageContext.Provider
                                 value={{ newMessage, setNewMessage }}
                             >
-                                <HomePage />
+                                <OnlineStatusContext.Provider
+                                    value={{
+                                        onlineStatuses,
+                                        setOnlineStatuses,
+                                    }}
+                                >
+                                    <HomePage />
+                                </OnlineStatusContext.Provider>
                             </NewMessageContext.Provider>
                         </StompClientContext.Provider>
                     </ProtectedRoute>
