@@ -56,7 +56,10 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+        <div
+            className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden"
+            style={{ backgroundColor: "var(--bg)" }}
+        >
             {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 blur-3xl animate-pulse" />
@@ -72,11 +75,12 @@ const LoginPage = () => {
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-cyan-400 to-emerald-400 shadow-2xl shadow-cyan-500/30 mb-6">
                         <svg
-                            className="w-10 h-10 text-slate-900"
+                            className="w-10 h-10"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
+                            style={{ color: "#0b1021" }}
                         >
                             <path
                                 strokeLinecap="round"
@@ -88,30 +92,49 @@ const LoginPage = () => {
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-300 bg-clip-text text-transparent mb-2">
                         Astra Chat
                     </h1>
-                    <p className="text-slate-400">
+                    <p style={{ color: "var(--text-secondary)" }}>
                         Connect, communicate, collaborate
                     </p>
                 </div>
 
                 {/* Login Card */}
-                <div className="glass-panel rounded-3xl p-8 border border-white/10 shadow-2xl backdrop-blur-xl">
+                <div
+                    className="glass-panel rounded-3xl p-8 border shadow-2xl backdrop-blur-xl"
+                    style={{
+                        borderColor: "var(--stroke)",
+                        color: "var(--text-primary)",
+                    }}
+                >
                     <div className="mb-6">
-                        <h2 className="text-2xl font-semibold text-white mb-1">
+                        <h2
+                            className="text-2xl font-semibold mb-1"
+                            style={{ color: "var(--text-primary)" }}
+                        >
                             Welcome back
                         </h2>
-                        <p className="text-slate-400 text-sm">
+                        <p
+                            style={{ color: "var(--text-secondary)" }}
+                            className="text-sm"
+                        >
                             Sign in to continue to your conversations
                         </p>
                     </div>
 
                     {/* Error Message */}
                     {errorMessage && (
-                        <div className="mb-6 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 flex items-center gap-3">
+                        <div
+                            className="mb-6 rounded-xl border px-4 py-3 flex items-center gap-3"
+                            style={{
+                                backgroundColor: "rgba(239, 68, 68, 0.1)",
+                                borderColor: "rgba(239, 68, 68, 0.2)",
+                            }}
+                        >
                             <svg
-                                className="w-5 h-5 text-red-400 shrink-0"
+                                className="w-5 h-5 shrink-0"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
+                                style={{ color: "var(--error)" }}
                             >
                                 <path
                                     strokeLinecap="round"
@@ -120,7 +143,10 @@ const LoginPage = () => {
                                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                 />
                             </svg>
-                            <p className="text-sm text-red-300">
+                            <p
+                                className="text-sm"
+                                style={{ color: "var(--error)" }}
+                            >
                                 {errorMessage}
                             </p>
                         </div>
@@ -134,17 +160,21 @@ const LoginPage = () => {
                         <div className="space-y-2">
                             <label
                                 htmlFor="email"
-                                className="block text-sm font-medium text-slate-300"
+                                className="block text-sm font-medium"
+                                style={{ color: "var(--text-primary)" }}
                             >
                                 Email address
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <svg
-                                        className="w-5 h-5 text-slate-500"
+                                        className="w-5 h-5"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
+                                        style={{
+                                            color: "var(--text-secondary)",
+                                        }}
                                     >
                                         <path
                                             strokeLinecap="round"
@@ -165,11 +195,31 @@ const LoginPage = () => {
                                     id="email"
                                     type="email"
                                     placeholder="you@example.com"
-                                    className="w-full rounded-xl border border-white/10 bg-white/5 pl-12 pr-4 py-3.5 text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all"
+                                    style={{
+                                        backgroundColor: "var(--input-bg)",
+                                        borderColor: "var(--stroke)",
+                                        color: "var(--input-text)",
+                                    }}
+                                    className="w-full rounded-xl border pl-12 pr-4 py-3.5 placeholder:text-slate-500 focus:outline-none transition-all"
+                                    onFocus={(e) => {
+                                        e.currentTarget.style.borderColor =
+                                            "var(--accent)";
+                                        e.currentTarget.style.boxShadow =
+                                            "0 0 0 3px rgba(14, 165, 233, 0.1)";
+                                    }}
+                                    onBlur={(e) => {
+                                        e.currentTarget.style.borderColor =
+                                            "var(--stroke)";
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                    }}
                                 />
                             </div>
                             {errors.email && (
-                                <p className="text-sm text-amber-400 flex items-center gap-1">
+                                <p
+                                    className="text-sm flex items-center gap-1"
+                                    style={{ color: "var(--warning)" }}
+                                >
                                     <svg
                                         className="w-4 h-4"
                                         fill="none"
@@ -192,17 +242,21 @@ const LoginPage = () => {
                         <div className="space-y-2">
                             <label
                                 htmlFor="password"
-                                className="block text-sm font-medium text-slate-300"
+                                className="block text-sm font-medium"
+                                style={{ color: "var(--text-primary)" }}
                             >
                                 Password
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <svg
-                                        className="w-5 h-5 text-slate-500"
+                                        className="w-5 h-5"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
+                                        style={{
+                                            color: "var(--text-secondary)",
+                                        }}
                                     >
                                         <path
                                             strokeLinecap="round"
@@ -224,11 +278,31 @@ const LoginPage = () => {
                                     id="password"
                                     type="password"
                                     placeholder="••••••••"
-                                    className="w-full rounded-xl border border-white/10 bg-white/5 pl-12 pr-4 py-3.5 text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all"
+                                    style={{
+                                        backgroundColor: "var(--input-bg)",
+                                        borderColor: "var(--stroke)",
+                                        color: "var(--input-text)",
+                                    }}
+                                    className="w-full rounded-xl border pl-12 pr-4 py-3.5 placeholder:text-slate-500 focus:outline-none transition-all"
+                                    onFocus={(e) => {
+                                        e.currentTarget.style.borderColor =
+                                            "var(--accent)";
+                                        e.currentTarget.style.boxShadow =
+                                            "0 0 0 3px rgba(14, 165, 233, 0.1)";
+                                    }}
+                                    onBlur={(e) => {
+                                        e.currentTarget.style.borderColor =
+                                            "var(--stroke)";
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                    }}
                                 />
                             </div>
                             {errors.password && (
-                                <p className="text-sm text-amber-400 flex items-center gap-1">
+                                <p
+                                    className="text-sm flex items-center gap-1"
+                                    style={{ color: "var(--warning)" }}
+                                >
                                     <svg
                                         className="w-4 h-4"
                                         fill="none"
@@ -251,11 +325,31 @@ const LoginPage = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 py-3.5 text-base font-semibold text-slate-900 shadow-lg shadow-cyan-500/25 transition-all hover:shadow-cyan-500/40 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            style={{
+                                background:
+                                    "linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%)",
+                                boxShadow: "0 4px 12px rgba(14, 165, 233, 0.3)",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.boxShadow =
+                                    "0 6px 16px rgba(14, 165, 233, 0.4)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.boxShadow =
+                                    "0 4px 12px rgba(14, 165, 233, 0.3)";
+                            }}
                         >
                             {isLoading ? (
                                 <>
-                                    <div className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
+                                    <div
+                                        className="w-5 h-5 border-2 border-t-white rounded-full animate-spin"
+                                        style={{
+                                            borderColor:
+                                                "rgba(255, 255, 255, 0.3)",
+                                            borderTopColor: "white",
+                                        }}
+                                    />
                                     Signing in...
                                 </>
                             ) : (
@@ -281,19 +375,42 @@ const LoginPage = () => {
 
                     {/* Divider */}
                     <div className="my-6 flex items-center gap-4">
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                        <span className="text-xs text-slate-500 uppercase tracking-wider">
+                        <div
+                            className="flex-1 h-px"
+                            style={{
+                                background:
+                                    "linear-gradient(to right, transparent, var(--stroke), transparent)",
+                            }}
+                        />
+                        <span
+                            className="text-xs uppercase tracking-wider"
+                            style={{ color: "var(--text-muted)" }}
+                        >
                             or
                         </span>
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                        <div
+                            className="flex-1 h-px"
+                            style={{
+                                background:
+                                    "linear-gradient(to right, transparent, var(--stroke), transparent)",
+                            }}
+                        />
                     </div>
 
                     {/* Sign Up Link */}
-                    <p className="text-center text-slate-400">
+                    <p style={{ color: "var(--text-secondary)" }}>
                         Don't have an account?{" "}
                         <Link
                             to="/signup"
-                            className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
+                            className="font-semibold transition-colors"
+                            style={{ color: "var(--accent)" }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.color =
+                                    "var(--accent-light)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.color = "var(--accent)";
+                            }}
                         >
                             Create one
                         </Link>
@@ -301,7 +418,10 @@ const LoginPage = () => {
                 </div>
 
                 {/* Footer */}
-                <p className="text-center text-slate-600 text-sm mt-8">
+                <p
+                    className="text-center text-sm mt-8"
+                    style={{ color: "var(--text-secondary)" }}
+                >
                     © 2026 Astra Chat. Secure messaging for everyone.
                 </p>
             </div>

@@ -174,8 +174,8 @@ const SettingsPage = () => {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-                <div className="flex items-center gap-3 text-white">
+            <div className="flex min-h-screen items-center justify-center">
+                <div className="flex items-center gap-3 text-slate-700 dark:text-white">
                     <div className="h-6 w-6 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
                     Loading...
                 </div>
@@ -184,14 +184,16 @@ const SettingsPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
+        <div className="min-h-screen p-4 md:p-8">
             <div className="mx-auto max-w-2xl">
                 {/* Header */}
                 <div className="mb-8 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-white">Settings</h1>
+                    <h1 className="text-2xl font-bold text-sky-900 dark:text-white">
+                        Settings
+                    </h1>
                     <button
                         onClick={() => navigate("/chat")}
-                        className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-white transition hover:bg-white/20"
+                        className="flex items-center gap-2 rounded-xl bg-cyan-100 dark:bg-white/10 px-4 py-2 text-cyan-700 dark:text-white transition hover:bg-cyan-200 dark:hover:bg-white/20"
                     >
                         <svg
                             className="h-5 w-5"
@@ -224,7 +226,7 @@ const SettingsPage = () => {
 
                 {/* Avatar Section */}
                 <div className="glass-panel mb-6 rounded-2xl p-6">
-                    <h2 className="mb-4 text-lg font-semibold text-white">
+                    <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                         Profile Picture
                     </h2>
                     <div className="flex items-center gap-6">
@@ -260,7 +262,7 @@ const SettingsPage = () => {
                             <button
                                 onClick={handleAvatarClick}
                                 disabled={uploadingAvatar}
-                                className="rounded-xl bg-cyan-500/20 px-4 py-2 text-sm font-medium text-cyan-300 transition hover:bg-cyan-500/30 disabled:opacity-50"
+                                className="rounded-xl bg-cyan-500/10 dark:bg-cyan-500/20 px-4 py-2 text-sm font-medium text-cyan-600 dark:text-cyan-300 transition hover:bg-cyan-500/20 dark:hover:bg-cyan-500/30 disabled:opacity-50"
                             >
                                 Upload New Photo
                             </button>
@@ -268,12 +270,12 @@ const SettingsPage = () => {
                                 <button
                                     onClick={handleDeleteAvatar}
                                     disabled={uploadingAvatar}
-                                    className="rounded-xl bg-red-500/20 px-4 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/30 disabled:opacity-50"
+                                    className="rounded-xl bg-red-500/10 dark:bg-red-500/20 px-4 py-2 text-sm font-medium text-red-600 dark:text-red-300 transition hover:bg-red-500/20 dark:hover:bg-red-500/30 disabled:opacity-50"
                                 >
                                     Remove Photo
                                 </button>
                             )}
-                            <p className="text-xs text-slate-400">
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
                                 JPG, PNG or GIF. Max 5MB.
                             </p>
                         </div>
@@ -285,58 +287,58 @@ const SettingsPage = () => {
                     onSubmit={handleSaveProfile}
                     className="glass-panel mb-6 rounded-2xl p-6"
                 >
-                    <h2 className="mb-4 text-lg font-semibold text-white">
+                    <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                         Profile Information
                     </h2>
                     <div className="space-y-4">
                         <div>
-                            <label className="mb-1 block text-sm font-medium text-slate-300">
+                            <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
                                 Display Name
                             </label>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white dark:focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
                                 placeholder="Your display name"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="mb-1 block text-sm font-medium text-slate-300">
+                            <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
                                 Username
                             </label>
                             <input
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white dark:focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
                                 placeholder="@username"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="mb-1 block text-sm font-medium text-slate-300">
+                            <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
                                 Email
                             </label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white dark:focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
                                 placeholder="your@email.com"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="mb-1 block text-sm font-medium text-slate-300">
+                            <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
                                 Bio
                             </label>
                             <textarea
                                 value={bio}
                                 onChange={(e) => setBio(e.target.value)}
                                 rows={3}
-                                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 resize-none"
+                                className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white dark:focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 resize-none"
                                 placeholder="Tell us about yourself..."
                             />
                         </div>
@@ -353,14 +355,14 @@ const SettingsPage = () => {
                 {/* Password Section */}
                 <div className="glass-panel rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-semibold text-white">
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                             Password
                         </h2>
                         <button
                             onClick={() =>
                                 setShowPasswordForm(!showPasswordForm)
                             }
-                            className="text-sm text-cyan-400 hover:text-cyan-300"
+                            className="text-sm text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300"
                         >
                             {showPasswordForm ? "Cancel" : "Change Password"}
                         </button>
@@ -372,7 +374,7 @@ const SettingsPage = () => {
                             className="mt-4 space-y-4"
                         >
                             <div>
-                                <label className="mb-1 block text-sm font-medium text-slate-300">
+                                <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
                                     Current Password
                                 </label>
                                 <input
@@ -381,13 +383,13 @@ const SettingsPage = () => {
                                     onChange={(e) =>
                                         setCurrentPassword(e.target.value)
                                     }
-                                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                    className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white dark:focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
                                     placeholder="Enter current password"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="mb-1 block text-sm font-medium text-slate-300">
+                                <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
                                     New Password
                                 </label>
                                 <input
@@ -396,13 +398,13 @@ const SettingsPage = () => {
                                     onChange={(e) =>
                                         setNewPassword(e.target.value)
                                     }
-                                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                    className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white dark:focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
                                     placeholder="Enter new password"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="mb-1 block text-sm font-medium text-slate-300">
+                                <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
                                     Confirm New Password
                                 </label>
                                 <input
@@ -411,7 +413,7 @@ const SettingsPage = () => {
                                     onChange={(e) =>
                                         setConfirmPassword(e.target.value)
                                     }
-                                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                    className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white dark:focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
                                     placeholder="Confirm new password"
                                     required
                                 />

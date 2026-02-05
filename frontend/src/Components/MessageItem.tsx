@@ -20,18 +20,30 @@ const MessageItem = ({
             <div className="max-w-[70ch] space-y-1">
                 {showName && (
                     <div
-                        className={`text-xs font-semibold ${isMine ? "text-cyan-200 text-right" : "text-emerald-200"}`}
+                        className={`text-xs font-semibold ${
+                            isMine ? "text-right" : ""
+                        }`}
+                        style={{
+                            color: isMine ? "var(--accent)" : "var(--success)",
+                        }}
                     >
                         {isMine ? "You" : receiverName}
                     </div>
                 )}
                 <div
-                    className={
-                        "relative rounded-3xl px-4 py-3 text-sm leading-relaxed shadow-lg" +
-                        (isMine
-                            ? " bg-gradient-to-br from-cyan-500 to-emerald-400 text-slate-900"
-                            : " bg-white/10 text-slate-100 border border-white/5")
-                    }
+                    className="relative rounded-3xl px-4 py-3 text-sm leading-relaxed transition"
+                    style={{
+                        backgroundColor: isMine
+                            ? "var(--accent)"
+                            : "var(--input-bg)",
+                        color: isMine ? "#ffffff" : "var(--text-primary)",
+                        border: isMine
+                            ? `1px solid var(--accent)`
+                            : `1px solid var(--stroke)`,
+                        boxShadow: isMine
+                            ? "0 4px 12px rgba(14, 165, 233, 0.2)"
+                            : "0 2px 4px rgba(0, 0, 0, 0.05)",
+                    }}
                 >
                     <span className="block whitespace-pre-wrap break-words">
                         {message.content}

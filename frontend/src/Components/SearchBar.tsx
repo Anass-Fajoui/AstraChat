@@ -72,10 +72,11 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
         <div ref={searchRef} className="relative">
             <div className="relative">
                 <svg
-                    className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                    className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    style={{ color: "var(--text-secondary)" }}
                 >
                     <path
                         strokeLinecap="round"
@@ -96,27 +97,63 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
                     }
                     onKeyDown={handleKeyDown}
                     placeholder="Search users by name or username..."
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-400 outline-none transition focus:border-cyan-400/50 focus:bg-white/10 focus:ring-1 focus:ring-cyan-400/20"
+                    style={{
+                        backgroundColor: "var(--input-bg)",
+                        borderColor: "var(--stroke)",
+                        color: "var(--input-text)",
+                    }}
+                    className="w-full rounded-xl border py-2.5 pl-10 pr-4 text-sm placeholder-slate-400 outline-none transition focus:ring-1"
+                    onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "var(--accent)";
+                        e.currentTarget.style.boxShadow =
+                            "0 0 0 3px rgba(14, 165, 233, 0.1)";
+                        if (query.trim() && searchResults.length > 0) {
+                            setIsOpen(true);
+                        }
+                    }}
+                    onBlur={(e) => {
+                        e.currentTarget.style.borderColor = "var(--stroke)";
+                        e.currentTarget.style.boxShadow = "none";
+                    }}
                 />
                 {searching && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
+                        <div
+                            className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"
+                            style={{
+                                borderColor: "var(--accent)",
+                                borderTopColor: "transparent",
+                            }}
+                        />
                     </div>
                 )}
             </div>
 
             {/* Search Results Dropdown */}
             {isOpen && (
-                <div className="absolute top-full left-0 right-0 z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-xl">
+                <div
+                    className="absolute top-full left-0 right-0 z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border shadow-lg"
+                    style={{
+                        backgroundColor: "var(--bg-secondary)",
+                        borderColor: "var(--stroke)",
+                        color: "var(--text-primary)",
+                    }}
+                >
                     {searchResults.length === 0 &&
                         !searching &&
                         query.trim() && (
-                            <div className="px-4 py-6 text-center text-sm text-slate-400">
+                            <div
+                                className="px-4 py-6 text-center text-sm"
+                                style={{ color: "var(--text-secondary)" }}
+                            >
                                 <svg
-                                    className="mx-auto mb-2 h-8 w-8 text-slate-500"
+                                    className="mx-auto mb-2 h-8 w-8"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
+                                    style={{
+                                        color: "var(--text-muted)",
+                                    }}
                                 >
                                     <path
                                         strokeLinecap="round"
@@ -132,11 +169,32 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
                     {searchResults.map((user) => (
                         <div
                             key={user.id}
-                            className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-cyan-500/10"
+                            className="flex w-full items-center gap-3 px-4 py-3 text-left transition"
+                            style={{
+                                backgroundColor: "var(--bg-secondary)",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                    "var(--input-bg)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                    "var(--bg-secondary)";
+                            }}
                         >
                             <div
                                 onClick={() => handleProfileClick(user.id)}
-                                className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900 hover:ring-2 hover:ring-cyan-400"
+                                className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold"
+                                style={{
+                                    transition: "all 0.2s ease",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 0 0 2px var(--accent)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                }}
                             >
                                 {user.avatarUrl ? (
                                     <img
@@ -145,27 +203,50 @@ const SearchBar = ({ onUserSelect }: SearchBarProps) => {
                                         className="h-full w-full object-cover"
                                     />
                                 ) : (
-                                    user.name.slice(0, 1).toUpperCase()
+                                    <span style={{ color: "#0b1021" }}>
+                                        {user.name.slice(0, 1).toUpperCase()}
+                                    </span>
                                 )}
                             </div>
                             <button
                                 onClick={() => handleUserClick(user)}
                                 className="flex-1 min-w-0 text-left"
                             >
-                                <p className="font-medium text-white truncate">
+                                <p
+                                    className="font-medium truncate"
+                                    style={{ color: "var(--text-primary)" }}
+                                >
                                     {user.name}
                                 </p>
-                                <p className="text-xs text-slate-400 truncate">
+                                <p
+                                    className="text-xs truncate"
+                                    style={{ color: "var(--text-secondary)" }}
+                                >
                                     @{user.username}
                                 </p>
                             </button>
                             <button
                                 onClick={() => handleUserClick(user)}
-                                className="p-2 rounded-lg hover:bg-white/10 transition"
+                                className="p-2 rounded-lg transition"
+                                style={{
+                                    color: "var(--text-secondary)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "var(--input-bg)";
+                                    e.currentTarget.style.color =
+                                        "var(--accent)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor =
+                                        "transparent";
+                                    e.currentTarget.style.color =
+                                        "var(--text-secondary)";
+                                }}
                                 title="Start chat"
                             >
                                 <svg
-                                    className="h-4 w-4 text-slate-400 hover:text-cyan-400"
+                                    className="h-4 w-4"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StompClientContext } from "../Context/StompClientContext";
+import { useTheme } from "../Context/ThemeContext";
 import { getStoredUser } from "../utils/Storage";
 import { fetchProfile } from "../api/api";
 import type { User } from "../types/types";
@@ -14,6 +15,7 @@ const Header = ({ setSelectedConv }: HeaderProps) => {
     const storedUser = getStoredUser();
     const stompContext = useContext(StompClientContext);
     const [user, setUser] = useState<User | null>(null);
+    const { theme, toggleTheme } = useTheme();
 
     if (!stompContext) {
         throw new Error("the stomp context must be provided");
@@ -38,13 +40,14 @@ const Header = ({ setSelectedConv }: HeaderProps) => {
     return (
         <header className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-3xl px-6 py-4">
             <div
-                className="flex items-center gap-4 hover:cursor-pointer"
+                className="flex items-center gap-4 hover:cursor-pointer transition-opacity hover:opacity-80"
                 onClick={() => {
                     setSelectedConv("");
                     navigate("/chat");
                 }}
+                style={{ color: "var(--text-primary)" }}
             >
-                <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-slate-900 font-semibold shadow-lg">
+                <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400 font-semibold shadow-lg">
                     {user?.avatarUrl ? (
                         <img
                             src={user.avatarUrl}
@@ -52,21 +55,97 @@ const Header = ({ setSelectedConv }: HeaderProps) => {
                             className="h-full w-full object-cover"
                         />
                     ) : (
-                        displayName.slice(0, 1).toUpperCase()
+                        <span style={{ color: "#0b1021" }}>
+                            {displayName.slice(0, 1).toUpperCase()}
+                        </span>
                     )}
                 </div>
                 <div className="space-y-1">
-                    <p className="text-lg font-semibold text-white">
+                    <p
+                        className="text-lg font-semibold"
+                        style={{ color: "var(--text-primary)" }}
+                    >
                         {displayName}
                     </p>
-                    <p className="text-sm text-slate-400">@{displayUsername}</p>
+                    <p
+                        className="text-sm"
+                        style={{ color: "var(--text-secondary)" }}
+                    >
+                        @{displayUsername}
+                    </p>
                 </div>
             </div>
 
             <div className="flex items-center gap-3">
+                {/* Theme Toggle */}
+                <button
+                    onClick={toggleTheme}
+                    className="inline-flex items-center justify-center rounded-2xl p-2 text-sm font-semibold transition"
+                    style={{
+                        backgroundColor: "var(--input-bg)",
+                        border: "1px solid var(--stroke)",
+                        color: "var(--text-primary)",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                            "var(--card-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                            "var(--input-bg)";
+                    }}
+                    title={
+                        theme === "dark"
+                            ? "Switch to light mode"
+                            : "Switch to dark mode"
+                    }
+                >
+                    {theme === "dark" ? (
+                        <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                            />
+                        </svg>
+                    ) : (
+                        <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                            />
+                        </svg>
+                    )}
+                </button>
                 <button
                     onClick={() => navigate("/settings")}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-lg border border-white/10 transition hover:bg-white/20"
+                    className="inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold transition"
+                    style={{
+                        backgroundColor: "var(--input-bg)",
+                        border: "1px solid var(--stroke)",
+                        color: "var(--text-primary)",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                            "var(--card-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                            "var(--input-bg)";
+                    }}
                     title="Settings"
                 >
                     <svg
@@ -91,7 +170,19 @@ const Header = ({ setSelectedConv }: HeaderProps) => {
                     <span className="hidden sm:inline">Settings</span>
                 </button>
                 <button
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/20 border border-white/10 transition hover:bg-red-500/80 hover:text-slate-950"
+                    className="inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold transition"
+                    style={{
+                        backgroundColor: "var(--error)",
+                        color: "#ffffff",
+                        border: "1px solid var(--error)",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                            "var(--error-light)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "var(--error)";
+                    }}
                     onClick={logout}
                 >
                     Logout

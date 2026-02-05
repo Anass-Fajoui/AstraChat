@@ -1,19 +1,133 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* ============================================================ */
+/* DARK THEME (Default) */
+/* ============================================================ */
 :root {
 	color-scheme: dark;
+	
+	/* Background Colors */
 	--bg: #0b1021;
+	--bg-secondary: #0f172a;
+	--bg-tertiary: #1a1f3a;
+	
+	/* Card & Surface Colors */
 	--card: rgba(255, 255, 255, 0.06);
 	--card-strong: rgba(255, 255, 255, 0.12);
+	--card-hover: rgba(255, 255, 255, 0.15);
+	
+	/* Border & Stroke */
 	--stroke: rgba(255, 255, 255, 0.14);
+	--stroke-strong: rgba(255, 255, 255, 0.2);
+	
+	/* Shadows & Glows */
 	--glow: 0 20px 60px rgba(56, 189, 248, 0.18);
+	--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+	--shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+	
+	/* Accent Colors */
 	--accent: #0ea5e9;
+	--accent-light: #38bdf8;
+	--accent-dark: #0284c7;
 	--accent-2: #fbbf24;
+	--accent-2-light: #fcd34d;
+	--accent-2-dark: #d97706;
+	
+	/* Text Colors */
+	--text-primary: #e2e8f0;
+	--text-secondary: #94a3b8;
+	--text-muted: #64748b;
+	--text-disabled: #475569;
+	
+	/* Semantic Colors */
+	--success: #10b981;
+	--success-light: #34d399;
+	--error: #ef4444;
+	--error-light: #f87171;
+	--warning: #f59e0b;
+	--info: #06b6d4;
+	
+	/* Input Colors */
+	--input-bg: rgba(255, 255, 255, 0.08);
+	--input-border: rgba(255, 255, 255, 0.12);
+	--input-text: #e2e8f0;
+	--input-placeholder: #64748b;
+	
+	/* Scrollbar */
+	--scrollbar-track: rgba(255, 255, 255, 0.03);
+	--scrollbar-thumb: rgba(14, 165, 233, 0.6);
+	--scrollbar-thumb-hover: rgba(14, 165, 233, 0.9);
 }
 
+/* ============================================================ */
+/* LIGHT THEME */
+/* ============================================================ */
+:root.light {
+	color-scheme: light;
+	
+	/* Background Colors */
+	--bg: #ffffff;
+	--bg-secondary: #f8fafc;
+	--bg-tertiary: #f1f5f9;
+	
+	/* Card & Surface Colors */
+	--card: rgba(255, 255, 255, 0.95);
+	--card-strong: rgba(255, 255, 255, 1);
+	--card-hover: rgba(241, 245, 249, 1);
+	
+	/* Border & Stroke */
+	--stroke: rgba(0, 0, 0, 0.08);
+	--stroke-strong: rgba(0, 0, 0, 0.12);
+	
+	/* Shadows & Glows */
+	--glow: 0 4px 24px rgba(0, 0, 0, 0.08);
+	--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+	--shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+	
+	/* Accent Colors */
+	--accent: #0284c7;
+	--accent-light: #38bdf8;
+	--accent-dark: #0c4a6e;
+	--accent-2: #d97706;
+	--accent-2-light: #f59e0b;
+	--accent-2-dark: #92400e;
+	
+	/* Text Colors */
+	--text-primary: #1e293b;
+	--text-secondary: #475569;
+	--text-muted: #94a3b8;
+	--text-disabled: #cbd5e1;
+	
+	/* Semantic Colors */
+	--success: #059669;
+	--success-light: #10b981;
+	--error: #dc2626;
+	--error-light: #ef4444;
+	--warning: #ca8a04;
+	--info: #0891b2;
+	
+	/* Input Colors */
+	--input-bg: rgba(248, 250, 252, 1);
+	--input-border: rgba(203, 213, 225, 1);
+	--input-text: #1e293b;
+	--input-placeholder: #94a3b8;
+	
+	/* Scrollbar */
+	--scrollbar-track: #f1f5f9;
+	--scrollbar-thumb: #cbd5e1;
+	--scrollbar-thumb-hover: #94a3b8;
+}
+
+/* ============================================================ */
+/* GLOBAL STYLES */
+/* ============================================================ */
 * {
 	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
 }
 
 body {
@@ -24,7 +138,14 @@ body {
 		radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.22), transparent 26%),
 		radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.16), transparent 36%),
 		linear-gradient(145deg, #05070f, #0f172a 60%, #0b1021);
-	color: #e2e8f0;
+	color: var(--text-primary);
+	transition: background 0.3s ease, color 0.3s ease;
+	background-attachment: fixed;
+}
+
+:root.light body {
+	background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+	background-attachment: fixed;
 }
 
 #root {
@@ -32,30 +153,153 @@ body {
 }
 
 a {
-	color: inherit;
+	color: var(--accent);
+	text-decoration: none;
+	transition: color 0.2s ease;
 }
 
+a:hover {
+	color: var(--accent-light);
+}
+
+/* ============================================================ */
+/* GLASS PANEL COMPONENTS */
+/* ============================================================ */
 .glass-panel {
 	background: linear-gradient(140deg, var(--card), var(--card-strong));
 	border: 1px solid var(--stroke);
 	box-shadow: var(--glow);
 	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	transition: all 0.3s ease;
+	color: var(--text-primary);
 }
 
+.glass-panel:hover {
+	border-color: var(--stroke-strong);
+	background: linear-gradient(140deg, var(--card-hover), var(--card-strong));
+}
+
+:root.light .glass-panel {
+	background: var(--card-strong);
+	border: 1px solid var(--stroke);
+	box-shadow: var(--shadow-sm);
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+
+:root.light .glass-panel:hover {
+	background: var(--card-hover);
+	border-color: var(--stroke-strong);
+	box-shadow: var(--shadow-md);
+}
+
+/* ============================================================ */
+/* TEXT SELECTION */
+/* ============================================================ */
 ::selection {
 	background: rgba(14, 165, 233, 0.25);
 	color: #f8fafc;
 }
 
-::-webkit-scrollbar {
-	width: 10px;
+:root.light ::selection {
+	background: rgba(14, 165, 233, 0.3);
+	color: #0c4a6e;
 }
 
-::-webkit-scrollbar-thumb {
-	background: linear-gradient(180deg, rgba(14, 165, 233, 0.9), rgba(14, 165, 233, 0.5));
-	border-radius: 999px;
+/* ============================================================ */
+/* SCROLLBAR STYLES */
+/* ============================================================ */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-	background: rgba(255, 255, 255, 0.03);
+	background: var(--scrollbar-track);
+	border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb);
+	border-radius: 999px;
+	border: 2px solid transparent;
+	background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--scrollbar-thumb-hover);
+	border: 2px solid transparent;
+	background-clip: padding-box;
+}
+
+/* ============================================================ */
+/* FORM ELEMENTS */
+/* ============================================================ */
+input,
+textarea,
+select {
+	background-color: var(--input-bg);
+	border: 1px solid var(--input-border);
+	color: var(--input-text);
+	font-family: "Space Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;
+	transition: all 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--input-placeholder);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+button {
+	transition: all 0.2s ease;
+	font-family: "Space Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;
+	cursor: pointer;
+	border-radius: 12px;
+}
+
+button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ============================================================ */
+/* ANIMATIONS */
+/* ============================================================ */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideInLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.fade-in {
+	animation: fadeIn 0.3s ease;
+}
+
+.slide-in-left {
+	animation: slideInLeft 0.3s ease;
 }

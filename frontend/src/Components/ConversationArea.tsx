@@ -153,10 +153,22 @@ const ConversationArea = () => {
     }
 
     return (
-        <div className="flex h-full flex-col text-slate-100">
-            <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-800/60 px-6 py-4">
+        <div
+            className="flex h-full flex-col"
+            style={{ color: "var(--text-primary)" }}
+        >
+            <div
+                className="flex items-center justify-between border-b px-6 py-4"
+                style={{
+                    borderColor: "var(--stroke)",
+                    backgroundColor: "var(--bg-secondary)",
+                }}
+            >
                 <div className="space-y-1">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+                    <p
+                        className="text-xs uppercase tracking-[0.18em] font-semibold"
+                        style={{ color: "var(--text-secondary)" }}
+                    >
                         Chatting with
                     </p>
                     <div className="flex items-center gap-3">
@@ -169,7 +181,10 @@ const ConversationArea = () => {
                                         className="h-full w-full object-cover"
                                     />
                                 ) : (
-                                    <div className="flex h-full w-full items-center justify-center font-semibold text-slate-900">
+                                    <div
+                                        className="flex h-full w-full items-center justify-center font-semibold"
+                                        style={{ color: "#0b1021" }}
+                                    >
                                         {receiverUser?.name
                                             ?.charAt(0)
                                             .toUpperCase() || "?"}
@@ -178,18 +193,28 @@ const ConversationArea = () => {
                             </div>
                             {/* Online indicator */}
                             <span
-                                className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-slate-900 ${
-                                    isOnline ? "bg-emerald-400" : "bg-slate-500"
-                                }`}
+                                className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2"
+                                style={{
+                                    borderColor: "var(--bg-secondary)",
+                                    backgroundColor: isOnline
+                                        ? "var(--success)"
+                                        : "var(--text-muted)",
+                                }}
                             />
                         </div>
                         <div>
-                            <p className="text-lg font-semibold">
+                            <p
+                                className="text-lg font-semibold"
+                                style={{ color: "var(--text-primary)" }}
+                            >
                                 {receiverUser ? receiverUser.name : "Loading"}
                             </p>
-                            <p className="text-xs text-slate-400">
+                            <p
+                                className="text-xs"
+                                style={{ color: "var(--text-secondary)" }}
+                            >
                                 {isOnline ? (
-                                    <span className="text-emerald-400">
+                                    <span style={{ color: "var(--success)" }}>
                                         Online
                                     </span>
                                 ) : (
@@ -201,39 +226,83 @@ const ConversationArea = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-slate-300">
+                <div className="flex items-center gap-3 text-sm">
                     <button
                         onClick={() => navigate(`/profile/${receiverId}`)}
-                        className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1 text-slate-200 transition hover:border-cyan-400/60 hover:text-white"
+                        className="rounded-2xl px-3 py-1 transition"
+                        style={{
+                            border: "1px solid var(--stroke)",
+                            backgroundColor: "var(--input-bg)",
+                            color: "var(--text-secondary)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor =
+                                "var(--card-hover)";
+                            e.currentTarget.style.borderColor =
+                                "var(--stroke-strong)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor =
+                                "var(--input-bg)";
+                            e.currentTarget.style.borderColor = "var(--stroke)";
+                        }}
                     >
                         View Profile
                     </button>
                     <button
                         onClick={() => navigate("/chat")}
-                        className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1 text-slate-200 transition hover:border-cyan-400/60 hover:text-white"
+                        className="rounded-2xl px-3 py-1 transition"
+                        style={{
+                            border: "1px solid var(--stroke)",
+                            backgroundColor: "var(--input-bg)",
+                            color: "var(--text-secondary)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor =
+                                "var(--card-hover)";
+                            e.currentTarget.style.borderColor =
+                                "var(--stroke-strong)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor =
+                                "var(--input-bg)";
+                            e.currentTarget.style.borderColor = "var(--stroke)";
+                        }}
                     >
                         Back to list
                     </button>
                 </div>
             </div>
 
-            <div className="flex-1 overflow-hidden bg-slate-900/50">
+            <div
+                className="flex-1 overflow-hidden"
+                style={{ backgroundColor: "var(--bg)" }}
+            >
                 <div
                     className="flex h-full flex-col gap-3 overflow-y-auto px-6 py-6"
                     ref={containerRef}
                 >
                     {messagesLoading && (
-                        <p className="text-sm text-slate-300">
+                        <p
+                            className="text-sm"
+                            style={{ color: "var(--text-secondary)" }}
+                        >
                             Loading messages...
                         </p>
                     )}
                     {messagesError && (
-                        <p className="text-sm text-amber-300">
+                        <p
+                            className="text-sm"
+                            style={{ color: "var(--error)" }}
+                        >
                             {messagesError}
                         </p>
                     )}
                     {!messagesLoading && messages.length === 0 && (
-                        <p className="text-center text-slate-400">
+                        <p
+                            className="text-center"
+                            style={{ color: "var(--text-secondary)" }}
+                        >
                             There are no messages yet. Say hi!
                         </p>
                     )}
@@ -256,13 +325,33 @@ const ConversationArea = () => {
                             <div key={msg.id || index}>
                                 {showDateSeparator && (
                                     <div className="flex items-center gap-4 my-4">
-                                        <div className="flex-1 h-px bg-white/10" />
-                                        <span className="px-3 py-1 rounded-full bg-slate-800/80 text-xs font-medium text-slate-400 border border-white/10">
+                                        <div
+                                            className="flex-1 h-px"
+                                            style={{
+                                                backgroundColor:
+                                                    "var(--stroke)",
+                                            }}
+                                        />
+                                        <span
+                                            className="px-3 py-1 rounded-full text-xs font-medium border"
+                                            style={{
+                                                backgroundColor:
+                                                    "var(--input-bg)",
+                                                borderColor: "var(--stroke)",
+                                                color: "var(--text-secondary)",
+                                            }}
+                                        >
                                             {formatDateSeparator(
                                                 msg.timestamp!,
                                             )}
                                         </span>
-                                        <div className="flex-1 h-px bg-white/10" />
+                                        <div
+                                            className="flex-1 h-px"
+                                            style={{
+                                                backgroundColor:
+                                                    "var(--stroke)",
+                                            }}
+                                        />
                                     </div>
                                 )}
                                 <MessageItem
@@ -277,18 +366,49 @@ const ConversationArea = () => {
             </div>
 
             <form
-                className="flex items-center gap-3 border-t border-white/10 bg-slate-900/80 px-4 py-4"
+                className="flex items-center gap-3 border-t px-4 py-4"
+                style={{
+                    borderColor: "var(--stroke)",
+                    backgroundColor: "var(--bg-secondary)",
+                }}
                 onSubmit={(event) => sendMessage(event)}
             >
                 <input
                     type="text"
-                    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 shadow-inner focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+                    className="flex-1 rounded-2xl border px-4 py-3 outline-none transition"
+                    style={{
+                        backgroundColor: "var(--input-bg)",
+                        borderColor: "var(--stroke)",
+                        color: "var(--input-text)",
+                    }}
+                    onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "var(--accent)";
+                        e.currentTarget.style.boxShadow =
+                            "0 0 0 3px rgba(14, 165, 233, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                        e.currentTarget.style.borderColor = "var(--stroke)";
+                        e.currentTarget.style.boxShadow = "none";
+                    }}
                     ref={inputRef}
                     placeholder="Type a message..."
                 />
                 <button
                     type="submit"
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-400 px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/30 transition hover:shadow-emerald-400/30"
+                    className="inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
+                    style={{
+                        background:
+                            "linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%)",
+                        boxShadow: "0 4px 12px rgba(14, 165, 233, 0.3)",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 6px 16px rgba(14, 165, 233, 0.4)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 12px rgba(14, 165, 233, 0.3)";
+                    }}
                 >
                     Send
                 </button>

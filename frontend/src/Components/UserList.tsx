@@ -77,16 +77,31 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
     };
 
     return (
-        <aside className="glass-panel flex h-full flex-col rounded-3xl p-4 text-slate-100">
+        <aside
+            className="glass-panel flex h-full flex-col rounded-3xl p-4"
+            style={{ color: "var(--text-primary)" }}
+        >
             {/* Header */}
             <div className="flex items-center justify-between pb-2">
                 <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-slate-400">
+                    <p
+                        className="text-xs uppercase tracking-[0.16em] font-semibold"
+                        style={{ color: "var(--text-secondary)" }}
+                    >
                         Inbox
                     </p>
-                    <h3 className="text-xl font-semibold">Conversations</h3>
+                    <h3 className="text-xl font-semibold mt-1">
+                        Conversations
+                    </h3>
                 </div>
-                <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-200 border border-white/10">
+                <span
+                    className="rounded-full px-3 py-1 text-xs font-semibold"
+                    style={{
+                        backgroundColor: "var(--input-bg)",
+                        border: "1px solid var(--stroke)",
+                        color: "var(--text-secondary)",
+                    }}
+                >
                     {conversations.length} chats
                 </span>
             </div>
@@ -100,27 +115,53 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
             <div className="flex-1 space-y-2 overflow-y-auto pr-1">
                 {loading && (
                     <div className="flex items-center justify-center py-8">
-                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-                        <span className="ml-2 text-sm text-slate-300">
+                        <div
+                            className="h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"
+                            style={{
+                                borderColor: "var(--accent)",
+                                borderTopColor: "transparent",
+                            }}
+                        />
+                        <span
+                            className="ml-2 text-sm"
+                            style={{ color: "var(--text-secondary)" }}
+                        >
                             Loading conversations...
                         </span>
                     </div>
                 )}
 
                 {error && (
-                    <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
-                        <p className="text-sm text-red-300">{error}</p>
+                    <div
+                        className="rounded-xl border px-4 py-3"
+                        style={{
+                            backgroundColor: "rgba(239, 68, 68, 0.1)",
+                            borderColor: "rgba(239, 68, 68, 0.2)",
+                        }}
+                    >
+                        <p
+                            className="text-sm"
+                            style={{ color: "var(--error)" }}
+                        >
+                            {error}
+                        </p>
                     </div>
                 )}
 
                 {!loading && conversations.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="mb-4 rounded-full bg-white/5 p-4">
+                        <div
+                            className="mb-4 rounded-full p-4"
+                            style={{
+                                backgroundColor: "var(--input-bg)",
+                            }}
+                        >
                             <svg
-                                className="h-8 w-8 text-slate-500"
+                                className="h-8 w-8"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
+                                style={{ color: "var(--text-secondary)" }}
                             >
                                 <path
                                     strokeLinecap="round"
@@ -130,10 +171,16 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                                 />
                             </svg>
                         </div>
-                        <p className="text-sm font-medium text-slate-300">
+                        <p
+                            className="text-sm font-medium"
+                            style={{ color: "var(--text-secondary)" }}
+                        >
                             No conversations yet
                         </p>
-                        <p className="mt-1 text-xs text-slate-500">
+                        <p
+                            className="mt-1 text-xs"
+                            style={{ color: "var(--text-muted)" }}
+                        >
                             Search for users above to start chatting
                         </p>
                     </div>
@@ -142,16 +189,39 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                 {conversations.map((conv) => (
                     <button
                         key={conv.odUserId}
-                        className={
-                            conv.odUserId === selectedConv
-                                ? "w-full rounded-2xl border border-cyan-300/50 bg-cyan-500/20 px-4 py-3 text-left shadow-lg shadow-cyan-500/15 transition hover:-translate-y-[1px]"
-                                : "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left transition hover:-translate-y-[1px] hover:border-cyan-300/40 hover:bg-cyan-500/10"
-                        }
+                        className="w-full rounded-2xl px-4 py-3 text-left transition hover:-translate-y-[1px]"
+                        style={{
+                            backgroundColor:
+                                conv.odUserId === selectedConv
+                                    ? "var(--card-hover)"
+                                    : "var(--input-bg)",
+                            border:
+                                conv.odUserId === selectedConv
+                                    ? `1px solid var(--accent)`
+                                    : `1px solid var(--stroke)`,
+                            color: "var(--text-primary)",
+                        }}
+                        onMouseEnter={(e) => {
+                            if (conv.odUserId !== selectedConv) {
+                                e.currentTarget.style.backgroundColor =
+                                    "var(--card-hover)";
+                                e.currentTarget.style.borderColor =
+                                    "var(--stroke-strong)";
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            if (conv.odUserId !== selectedConv) {
+                                e.currentTarget.style.backgroundColor =
+                                    "var(--input-bg)";
+                                e.currentTarget.style.borderColor =
+                                    "var(--stroke)";
+                            }
+                        }}
                         onClick={() => handleConversationClick(conv)}
                     >
                         <div className="flex items-start gap-3">
                             {/* Avatar */}
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold text-slate-900">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-semibold">
                                 {conv.avatarUrl ? (
                                     <img
                                         src={conv.avatarUrl}
@@ -159,27 +229,48 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                                         className="h-full w-full object-cover"
                                     />
                                 ) : (
-                                    conv.name.slice(0, 1).toUpperCase()
+                                    <span style={{ color: "#0b1021" }}>
+                                        {conv.name.slice(0, 1).toUpperCase()}
+                                    </span>
                                 )}
                             </div>
 
                             {/* Content */}
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between gap-2">
-                                    <p className="font-semibold text-white truncate">
+                                    <p
+                                        className="font-semibold truncate"
+                                        style={{
+                                            color: "var(--text-primary)",
+                                        }}
+                                    >
                                         {conv.name}
                                     </p>
                                     {conv.lastMessageTime && (
-                                        <span className="shrink-0 text-xs text-slate-400">
+                                        <span
+                                            className="shrink-0 text-xs"
+                                            style={{
+                                                color: "var(--text-secondary)",
+                                            }}
+                                        >
                                             {formatTime(conv.lastMessageTime)}
                                         </span>
                                     )}
                                 </div>
                                 <div className="flex items-center justify-between gap-2 mt-0.5">
-                                    <p className="text-xs text-slate-400 truncate">
+                                    <p
+                                        className="text-xs truncate"
+                                        style={{
+                                            color: "var(--text-secondary)",
+                                        }}
+                                    >
                                         {conv.lastMessageSenderId ===
                                             currentUser.id && (
-                                            <span className="text-slate-500">
+                                            <span
+                                                style={{
+                                                    color: "var(--text-muted)",
+                                                }}
+                                            >
                                                 You:{" "}
                                             </span>
                                         )}
@@ -187,7 +278,14 @@ const UserList = ({ selectedConv, setSelectedConv }: UserListProps) => {
                                     </p>
                                     {newMessage &&
                                     newMessage.senderId === conv.odUserId ? (
-                                        <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-amber-200 text-amber-900 px-2 py-0.5 text-xs font-semibold">
+                                        <span
+                                            className="shrink-0 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold"
+                                            style={{
+                                                backgroundColor:
+                                                    "var(--warning)",
+                                                color: "#ffffff",
+                                            }}
+                                        >
                                             New
                                         </span>
                                     ) : null}

@@ -1,9 +1,9 @@
 const EmptyConversation = () => {
     return (
-        <div className="flex h-full min-h-full flex-col items-center justify-center bg-slate-900/60 px-6 text-center text-slate-200">
-            <div className="mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 p-6">
+        <div className="flex h-full min-h-full flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/60 px-6 text-center text-slate-600 dark:text-slate-200">
+            <div className="mb-6 rounded-full bg-slate-100 dark:bg-gradient-to-br dark:from-cyan-500/20 dark:to-emerald-500/20 p-6">
                 <svg
-                    className="h-12 w-12 text-cyan-400"
+                    className="h-12 w-12 text-slate-400 dark:text-cyan-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -16,17 +16,17 @@ const EmptyConversation = () => {
                     />
                 </svg>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.16em] text-cyan-200">
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.16em] text-slate-500 dark:text-cyan-200">
                 No chat selected
             </div>
-            <h2 className="mt-4 text-3xl font-semibold">
+            <h2 className="mt-4 text-3xl font-semibold text-slate-800 dark:text-white">
                 Start a conversation
             </h2>
-            <p className="mt-2 max-w-xl text-slate-300">
+            <p className="mt-2 max-w-xl text-slate-500 dark:text-slate-300">
                 Search for users in the sidebar or select an existing
                 conversation to start chatting.
             </p>
-            <div className="mt-6 flex items-center gap-4 text-sm text-slate-400">
+            <div className="mt-6 flex items-center gap-4 text-sm text-slate-400 dark:text-slate-400">
                 <div className="flex items-center gap-2">
                     <svg
                         className="h-4 w-4"
@@ -43,7 +43,7 @@ const EmptyConversation = () => {
                     </svg>
                     <span>Search by name or username</span>
                 </div>
-                <span className="text-slate-600">•</span>
+                <span className="text-slate-300 dark:text-slate-600">•</span>
                 <div className="flex items-center gap-2">
                     <span>Real-time messaging</span>
                 </div>
